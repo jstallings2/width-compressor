@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="OwX7il" name="WidthCompressor" projectType="audioplug" useAppConfig="0"
-              displaySplashScreen="1" jucerFormatVersion="1">
-  <MAINGROUP id="O5PegQ" name="WidthCompressor">
-    <GROUP id="{6049548F-68A2-98B8-A5C6-A2F8A0B9869A}" name="Source">
-      <FILE id="C86TX5" name="PluginProcessor.cpp" compile="1" resource="0"
+<JUCERPROJECT id="mKCHL4" name="WidthCompressor" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+  <MAINGROUP id="m7XU6s" name="WidthCompressor">
+    <GROUP id="{5FEAA42E-1FCE-2B70-5EFC-5E6F8EDE248F}" name="Source">
+      <FILE id="shAKG7" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
-      <FILE id="KDUx87" name="PluginProcessor.h" compile="0" resource="0"
+      <FILE id="DhN3nE" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
-      <FILE id="pyvXuh" name="PluginEditor.cpp" compile="1" resource="0"
+      <FILE id="NfuXFv" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
-      <FILE id="vvav9a" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="RdyFRM" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
