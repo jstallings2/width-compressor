@@ -10,11 +10,14 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "CompControls.h"
+
 
 //==============================================================================
 /**
 */
-class WidthCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor
+class WidthCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor,
+public juce::ToggleButton::Listener
 {
 public:
     WidthCompressorAudioProcessorEditor (WidthCompressorAudioProcessor&);
@@ -23,11 +26,19 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    void buttonClicked(Button* button) override;
 
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     WidthCompressorAudioProcessor& audioProcessor;
+    
+    CompControls compControls;
+    ToggleButton muteButton;
+    ToggleButton soloButton;
+    
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WidthCompressorAudioProcessorEditor)
 };

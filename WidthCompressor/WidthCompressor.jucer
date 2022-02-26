@@ -11,6 +11,13 @@
       <FILE id="NfuXFv" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="RdyFRM" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="CSqHiK" name="CompControls.cpp" compile="1" resource="0"
+            file="Source/CompControls.cpp"/>
+      <FILE id="r4vaL5" name="CompControls.h" compile="0" resource="0" file="Source/CompControls.h"/>
+      <FILE id="oGHUS6" name="BandControlPanel.cpp" compile="1" resource="0"
+            file="Source/BandControlPanel.cpp"/>
+      <FILE id="Ea9BhJ" name="BandControlPanel.h" compile="0" resource="0"
+            file="Source/BandControlPanel.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
