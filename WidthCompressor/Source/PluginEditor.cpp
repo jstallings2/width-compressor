@@ -17,17 +17,13 @@ WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthC
     // editor's size to whatever you need it to be.
     
     
-    setSize (1000, 500);
+    setSize(1000, 500);
     
-    addAndMakeVisible(compControls);
+    addAndMakeVisible(band1ControlPanel);
+    addAndMakeVisible(band2ControlPanel);
     
     
-    // mute button
-    muteButton.setButtonText("Mute");
-    addAndMakeVisible(muteButton);
     
-    soloButton.setButtonText("Solo");
-    addAndMakeVisible(soloButton);
 }
 
 WidthCompressorAudioProcessorEditor::~WidthCompressorAudioProcessorEditor()
@@ -46,14 +42,8 @@ void WidthCompressorAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-    compControls.setBounds(0, 0, 600, 200);
-    
-    muteButton.setBounds(compControls.getRight() + 20, 150, 100, 40);
-    soloButton.setBounds(compControls.getRight() + 20, muteButton.getBottom() - 5, 100, 40);
+    band1ControlPanel.setBounds(0, 0, 600, 200);
+    band2ControlPanel.setBounds(0, 200, 600, 200);
 
     
-}
-
-void WidthCompressorAudioProcessorEditor::buttonClicked(Button *button) {
-    return;
 }

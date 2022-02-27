@@ -11,13 +11,13 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "CompControls.h"
+#include "BandControlPanel.h"
 
 
 //==============================================================================
 /**
 */
-class WidthCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor,
-public juce::ToggleButton::Listener
+class WidthCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
     WidthCompressorAudioProcessorEditor (WidthCompressorAudioProcessor&);
@@ -27,17 +27,24 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    void buttonClicked(Button* button) override;
+    // These methods should update fields dependent on number of bands and add them to the GUI
+    void addBand();
+    void removeBand();
+    
 
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     WidthCompressorAudioProcessor& audioProcessor;
+    BandControlPanel band1ControlPanel; // lowest frequency, always visible
     
-    CompControls compControls;
-    ToggleButton muteButton;
-    ToggleButton soloButton;
+    // Increasing frequency, only visible if numBands is set to 2, 3, or 4.
+    BandControlPanel band2ControlPanel;
+    // BandControlPanel band3ControlPanel;
+    // BandControlPanel band4ControlPanel;
     
+    int numBands = 2; // number of bands used, default 4.
+    int bandHeight = getHeight() / numBands; // height of each band in GUI
     
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WidthCompressorAudioProcessorEditor)
