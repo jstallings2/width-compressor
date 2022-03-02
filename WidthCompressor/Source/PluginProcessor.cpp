@@ -9,6 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
 //==============================================================================
 WidthCompressorAudioProcessor::WidthCompressorAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -95,6 +96,7 @@ void WidthCompressorAudioProcessor::prepareToPlay (double sampleRate, int sample
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    vuAnalysis.setSampleRate(sampleRate);
 }
 
 void WidthCompressorAudioProcessor::releaseResources()
@@ -152,10 +154,22 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     // interleaved by keeping the same state.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+        for (int n = 0; n < buffer.getNumSamples(); ++n) {
+            float x = buffer.getReadPointer(channel)[n];
+            meterValue = vuAnalysis.processSample(x, channel);
+        }
     }
+    
+    // Block that Dr. Tarr wrote to get corr between L & R:
+    /*
+    float cor = 0.f;
+    for (int i = 0; i < buffer.getNumSamples() ; ++i){
+        float left = buffer.getWritePointer(0)[i];
+        float right = buffer.getWritePointer(1)[i];
+        cor += (left * right);
+    }
+    cor /= buffer.getNumSamples();
+     */
 }
 
 //==============================================================================

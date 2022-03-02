@@ -12,12 +12,15 @@
 #include "PluginProcessor.h"
 #include "CompControls.h"
 #include "BandControlPanel.h"
+#include "SimpleMeter.h"
+
 
 
 //==============================================================================
 /**
 */
-class WidthCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor
+class WidthCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor,
+public Timer
 {
 public:
     WidthCompressorAudioProcessorEditor (WidthCompressorAudioProcessor&);
@@ -30,6 +33,7 @@ public:
     // These methods should update fields dependent on number of bands and add them to the GUI
     void addBand();
     void removeBand();
+    int getBandHeight();
     
 
 private:
@@ -44,8 +48,10 @@ private:
     // BandControlPanel band4ControlPanel;
     
     int numBands = 2; // number of bands used, default 4.
-    int bandHeight = getHeight() / numBands; // height of each band in GUI
     
-
+    SimpleMeter simpleMeter;
+    
+    void timerCallback() override;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WidthCompressorAudioProcessorEditor)
 };

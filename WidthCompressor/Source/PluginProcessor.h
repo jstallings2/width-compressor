@@ -9,7 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-
+#include "VUAnalysis.h"
 using namespace juce;
 
 //==============================================================================
@@ -54,8 +54,13 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    std::atomic<float> meterValue; // good for things that "interrupt" the audio thread
 
 private:
+    
+    VUAnalysis vuAnalysis;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WidthCompressorAudioProcessor)
 };
