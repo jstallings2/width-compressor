@@ -9,12 +9,13 @@
 //
 //  This class creates a meter component which draws a value between 0 and 1
 
+using namespace juce;
 #ifndef SimpleMeter_h
 #define SimpleMeter_h
 
 // Class definition
 class SimpleMeter  : public Component,
-                    private Timer
+private Timer
 {
 public:
     SimpleMeter()

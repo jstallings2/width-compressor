@@ -12,8 +12,7 @@
 #include "PluginProcessor.h"
 #include "CompControls.h"
 #include "BandControlPanel.h"
-#include "SimpleMeter.h"
-
+#include "VizFeedbackPanel.h"
 
 
 //==============================================================================
@@ -49,8 +48,9 @@ private:
     
     int numBands = 2; // number of bands used, default 4.
     
-    SimpleMeter simpleMeter;
-    
+    // Visual Feedback stuff
+    VizFeedbackPanel vizFeedbackPanel;
+        
     void timerCallback() override;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WidthCompressorAudioProcessorEditor)

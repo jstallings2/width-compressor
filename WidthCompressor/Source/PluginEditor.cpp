@@ -22,17 +22,11 @@ WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthC
     addAndMakeVisible(band1ControlPanel);
     addAndMakeVisible(band2ControlPanel);
     
-    // Meter things
+    addAndMakeVisible(vizFeedbackPanel);
     
-    simpleMeter.setBounds(25, 25, 10, 100);
-    simpleMeter.configuration = SimpleMeter::VERTICAL;
-    addAndMakeVisible(simpleMeter);
-    
+    // Start the timer which all our visualizers listen to.
     startTimerHz(30);
-    
-    
-    
-    
+
 }
 
 WidthCompressorAudioProcessorEditor::~WidthCompressorAudioProcessorEditor()
@@ -54,6 +48,7 @@ void WidthCompressorAudioProcessorEditor::resized()
     // subcomponents in your editor..
     band1ControlPanel.setBounds(0, 0, 600, getBandHeight());
     band2ControlPanel.setBounds(0, band1ControlPanel.getBottom(), 600, getBandHeight());
+    vizFeedbackPanel.setBounds(600, 0, getWidth() - 600, getHeight());
 }
 
 int WidthCompressorAudioProcessorEditor::getBandHeight() {
@@ -61,5 +56,8 @@ int WidthCompressorAudioProcessorEditor::getBandHeight() {
 }
 
 void WidthCompressorAudioProcessorEditor::timerCallback() {
-    simpleMeter.update(audioProcessor.meterValue);
+    // need to call update for every meter, a lot of copy-paste right now but when we have each band keep its own meters we'll just tell the bands to update their two meters each
+    vizFeedbackPanel.updateAllMeters(audioProcessor.meterValue);
+    //simpleMeter.update(audioProcessor.meterValue);
 }
+
