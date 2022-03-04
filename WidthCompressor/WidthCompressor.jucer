@@ -24,6 +24,10 @@
             file="Source/VizFeedbackPanel.cpp"/>
       <FILE id="QvsI5I" name="VizFeedbackPanel.h" compile="0" resource="0"
             file="Source/VizFeedbackPanel.h"/>
+      <FILE id="Gb28oi" name="BandFeedbackPanel.cpp" compile="1" resource="0"
+            file="Source/BandFeedbackPanel.cpp"/>
+      <FILE id="Vb7qPd" name="BandFeedbackPanel.h" compile="0" resource="0"
+            file="Source/BandFeedbackPanel.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

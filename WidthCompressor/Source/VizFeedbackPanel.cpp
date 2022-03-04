@@ -16,11 +16,13 @@ VizFeedbackPanel::VizFeedbackPanel()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    // Meter things
+    setNumBands(2);
+    bandHeight = WINDOW_HEIGHT / numBands;
+    band1FeedbackPanel.setBandHeight(bandHeight);
+    band1FeedbackPanel.setBounds(getX(), 0, 100, bandHeight);
+    band1FeedbackPanel.setAlwaysOnTop(true);
+    addAndMakeVisible(band1FeedbackPanel);
     
-    simpleMeter.setBounds(getX() + 100, 25, 100, 10);
-    simpleMeter.configuration = SimpleMeter::HORIZONTAL;
-    addAndMakeVisible(simpleMeter);
 
 }
 
@@ -36,7 +38,6 @@ void VizFeedbackPanel::paint (juce::Graphics& g)
        You should replace everything in this method with your own
        drawing code..
     */
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
@@ -44,14 +45,19 @@ void VizFeedbackPanel::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    g.drawText ("VizFeedbackPanel", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    //g.drawText ("VizFeedbackPanel", getLocalBounds(),
+                //juce::Justification::centred, true);   // draw some placeholder text
+    //String text = (String)getX() + " " + (String)getWidth() + " " +  (String)getBandHeight() + " " + (String)band1FeedbackPanel.getX() + " " +  (String)band1FeedbackPanel.getY() + " " +  (String)band1FeedbackPanel.getWidth() + " " +  (String)band1FeedbackPanel.getHeight();
+    //g.drawText(text, getLocalBounds(),
+                //juce::Justification::centred, true);   // draw some placeholder text
+ 
 }
 
 void VizFeedbackPanel::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
+    
 
 }
 
@@ -65,5 +71,18 @@ void VizFeedbackPanel::resized()
 void VizFeedbackPanel::updateAllMeters(std::atomic<float> &newMeterValue) {
     
     // when doing multiple meters, each meter will have a different value stored in the processor. Therefore we will call update for each meter and set it using its corresponding value from the processor. We get these values into this function as a (pointer to an) array of std::atomic<float>'s from the processor that has been passed to us by the editor.
-    simpleMeter.update(newMeterValue);
+    // for each band:
+        // update IN meter
+        // update OUT meter
+    // TODO: Ask Tarr if having things being passed down through components like this is bad / slow
+    // For now we are just passing this value but in the end will need to pass two
+    band1FeedbackPanel.updateMeters(newMeterValue);
+}
+
+int VizFeedbackPanel::getBandHeight() {
+    return bandHeight / numBands;
+}
+
+void VizFeedbackPanel::setNumBands(int newNumBands) {
+    numBands = newNumBands;
 }

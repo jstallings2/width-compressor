@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "SimpleMeter.h"
+#include "BandFeedbackPanel.h"
 
 //==============================================================================
 /*
@@ -25,13 +25,22 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    // Meter setting stuff
+    int getBandHeight();
+    
+    void setNumBands(int newNumBands);
+    
+    // Meter setting stuffs
     void updateAllMeters(std::atomic<float> &newMeterValue);
+    
+    const int WINDOW_HEIGHT = 600;
 
 private:
     
-    SimpleMeter simpleMeter;
     
+    int numBands = 2;
+    int bandHeight = WINDOW_HEIGHT / numBands;
+    
+    BandFeedbackPanel band1FeedbackPanel;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VizFeedbackPanel)

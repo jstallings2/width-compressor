@@ -17,12 +17,15 @@ WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthC
     // editor's size to whatever you need it to be.
     
     
-    setSize(1000, 500);
+    setSize(1000, 600);
     
     addAndMakeVisible(band1ControlPanel);
     addAndMakeVisible(band2ControlPanel);
     
+    vizFeedbackPanel.setNumBands(2);
+    vizFeedbackPanel.setBounds(600, 0, getWidth() - 600, getHeight());
     addAndMakeVisible(vizFeedbackPanel);
+    
     
     // Start the timer which all our visualizers listen to.
     startTimerHz(30);
@@ -49,8 +52,10 @@ void WidthCompressorAudioProcessorEditor::resized()
     band1ControlPanel.setBounds(0, 0, 600, getBandHeight());
     band2ControlPanel.setBounds(0, band1ControlPanel.getBottom(), 600, getBandHeight());
     vizFeedbackPanel.setBounds(600, 0, getWidth() - 600, getHeight());
+    
 }
 
+// TODO: Make band height a field & add a setter
 int WidthCompressorAudioProcessorEditor::getBandHeight() {
     return getHeight() / numBands;
 }

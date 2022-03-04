@@ -18,6 +18,7 @@
 //==============================================================================
 /**
 */
+
 class WidthCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor,
 public Timer
 {
@@ -34,8 +35,13 @@ public:
     void removeBand();
     int getBandHeight();
     
+    const static int WINDOW_HEIGHT = 1000;
+    const static int WINDOW_WIDTH = 600;
+    
 
 private:
+    
+    
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     WidthCompressorAudioProcessor& audioProcessor;
@@ -55,3 +61,4 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WidthCompressorAudioProcessorEditor)
 };
+
