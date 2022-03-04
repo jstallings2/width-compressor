@@ -57,8 +57,8 @@ void BandControlPanel::resized()
     // components that your component contains..
     compControls.setBounds(0, 0, 525, 200);
     
-    muteButton.setBounds(compControls.getRight() + 20, 120, 100, 40);
-    soloButton.setBounds(compControls.getRight() + 20, muteButton.getBottom() - 5, 100, 40);
+    muteButton.setBounds(compControls.getRight() + 10, 65, 100, 40);
+    soloButton.setBounds(compControls.getRight() + 10, muteButton.getBottom() - 5, 100, 40);
 
 }
 void BandControlPanel::buttonClicked(Button *button) {

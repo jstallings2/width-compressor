@@ -16,13 +16,18 @@ VizFeedbackPanel::VizFeedbackPanel()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    setNumBands(2);
+    // setNumBands(4);
     bandHeight = WINDOW_HEIGHT / numBands;
     // vizFeedbackPanelWidth =  WINDOW_WIDTH - 600;
     band1FeedbackPanel.setBandHeight(bandHeight);
     band1FeedbackPanel.setBounds(getX(), 0, vizFeedbackPanelWidth, bandHeight);
-    band1FeedbackPanel.setAlwaysOnTop(true);
+    band2FeedbackPanel.setBounds(getX(), band1FeedbackPanel.getBottom(), vizFeedbackPanelWidth, bandHeight);
+    band3FeedbackPanel.setBounds(getX(), band2FeedbackPanel.getBottom(), vizFeedbackPanelWidth, bandHeight);
+    band4FeedbackPanel.setBounds(getX(), band3FeedbackPanel.getBottom(), vizFeedbackPanelWidth, bandHeight);
     addAndMakeVisible(band1FeedbackPanel);
+    addAndMakeVisible(band2FeedbackPanel);
+    addAndMakeVisible(band3FeedbackPanel);
+    addAndMakeVisible(band4FeedbackPanel);
     
 
 }

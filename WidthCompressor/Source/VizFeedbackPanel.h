@@ -38,11 +38,14 @@ public:
 private:
     
     // I think putting values here that the band1FeedbackPanel constructor would need, before declaring the band1FeedbackPanel, was crucial to it working.
-    int numBands = 2;
+    int numBands = 4;
     int bandHeight = WINDOW_HEIGHT / numBands;
     int vizFeedbackPanelWidth = WINDOW_WIDTH - 600;
     
     BandFeedbackPanel band1FeedbackPanel;
+    BandFeedbackPanel band2FeedbackPanel;
+    BandFeedbackPanel band3FeedbackPanel;
+    BandFeedbackPanel band4FeedbackPanel;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VizFeedbackPanel)

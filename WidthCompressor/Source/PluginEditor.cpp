@@ -17,12 +17,14 @@ WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthC
     // editor's size to whatever you need it to be.
     
     
-    setSize(1000, 600);
+    setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     
     addAndMakeVisible(band1ControlPanel);
     addAndMakeVisible(band2ControlPanel);
+    addAndMakeVisible(band3ControlPanel);
+    addAndMakeVisible(band4ControlPanel);
     
-    vizFeedbackPanel.setNumBands(2);
+    vizFeedbackPanel.setNumBands(numBands);
     vizFeedbackPanel.setBounds(600, 0, getWidth() - 600, getHeight());
     addAndMakeVisible(vizFeedbackPanel);
     
@@ -51,6 +53,8 @@ void WidthCompressorAudioProcessorEditor::resized()
     // subcomponents in your editor..
     band1ControlPanel.setBounds(0, 0, 600, getBandHeight());
     band2ControlPanel.setBounds(0, band1ControlPanel.getBottom(), 600, getBandHeight());
+    band3ControlPanel.setBounds(0, band2ControlPanel.getBottom(), 600, getBandHeight());
+    band4ControlPanel.setBounds(0, band3ControlPanel.getBottom(), 600, getBandHeight());
     vizFeedbackPanel.setBounds(600, 0, getWidth() - 600, getHeight());
     
 }

@@ -35,8 +35,8 @@ public:
     void removeBand();
     int getBandHeight();
     
-    const static int WINDOW_HEIGHT = 1000;
-    const static int WINDOW_WIDTH = 600;
+    const int WINDOW_HEIGHT = 600;
+    const int WINDOW_WIDTH = 1000;
     
 
 private:
@@ -49,10 +49,10 @@ private:
     
     // Increasing frequency, only visible if numBands is set to 2, 3, or 4.
     BandControlPanel band2ControlPanel;
-    // BandControlPanel band3ControlPanel;
-    // BandControlPanel band4ControlPanel;
+    BandControlPanel band3ControlPanel;
+    BandControlPanel band4ControlPanel;
     
-    int numBands = 2; // number of bands used, default 4.
+    int numBands = 4; // number of bands used, default 4.
     
     // Visual Feedback stuff
     VizFeedbackPanel vizFeedbackPanel;
