@@ -18,8 +18,9 @@ VizFeedbackPanel::VizFeedbackPanel()
     // initialise any special settings that your component needs.
     setNumBands(2);
     bandHeight = WINDOW_HEIGHT / numBands;
+    // vizFeedbackPanelWidth =  WINDOW_WIDTH - 600;
     band1FeedbackPanel.setBandHeight(bandHeight);
-    band1FeedbackPanel.setBounds(getX(), 0, 100, bandHeight);
+    band1FeedbackPanel.setBounds(getX(), 0, vizFeedbackPanelWidth, bandHeight);
     band1FeedbackPanel.setAlwaysOnTop(true);
     addAndMakeVisible(band1FeedbackPanel);
     
