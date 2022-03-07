@@ -25,12 +25,15 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    void updateMeters(std::atomic<float> &newMeterValue);
+    SimpleMeter& getInMeter();
+    SimpleMeter& getOutMeter();
+    void updateMeter(SimpleMeter &meter, std::atomic<float> &newValue);
     void setBandHeight(int newBandHeight);
 
 private:
     
-    SimpleMeter simpleMeter;
+    SimpleMeter inMeter;
+    SimpleMeter outMeter;
     
     int bandHeight;
     

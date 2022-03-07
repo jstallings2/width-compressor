@@ -74,15 +74,24 @@ void VizFeedbackPanel::resized()
     Called with the timer frequency (i.e. 30 times a second)
     This should take in a pointer to an array or map of meterValues from the processor. (Right now it is just one value).
  */
-void VizFeedbackPanel::updateAllMeters(std::atomic<float> &newMeterValue) {
+void VizFeedbackPanel::updateAllMeters(std::atomic<float>* newMeterValues, String inOrOut) {
     
     // when doing multiple meters, each meter will have a different value stored in the processor. Therefore we will call update for each meter and set it using its corresponding value from the processor. We get these values into this function as a (pointer to an) array of std::atomic<float>'s from the processor that has been passed to us by the editor.
-    // for each band:
-        // update IN meter
-        // update OUT meter
+    // This method gets called twice, once for inputs and then once for outputs
     // TODO: Ask Tarr if having things being passed down through components like this is bad / slow
-    // For now we are just passing this value but in the end will need to pass two
-    band1FeedbackPanel.updateMeters(newMeterValue);
+    if (inOrOut == "in") {
+        band1FeedbackPanel.updateMeter(band1FeedbackPanel.getInMeter(), newMeterValues[0]);
+        band2FeedbackPanel.updateMeter(band2FeedbackPanel.getInMeter(), newMeterValues[1]);
+        band3FeedbackPanel.updateMeter(band3FeedbackPanel.getInMeter(), newMeterValues[2]);
+        band4FeedbackPanel.updateMeter(band4FeedbackPanel.getInMeter(), newMeterValues[3]);
+    }
+    else {
+        // out
+        band1FeedbackPanel.updateMeter(band1FeedbackPanel.getOutMeter(), newMeterValues[0]);
+        band2FeedbackPanel.updateMeter(band2FeedbackPanel.getOutMeter(), newMeterValues[1]);
+        band3FeedbackPanel.updateMeter(band3FeedbackPanel.getOutMeter(), newMeterValues[2]);
+        band4FeedbackPanel.updateMeter(band4FeedbackPanel.getOutMeter(), newMeterValues[3]);
+    }
 }
 
 int VizFeedbackPanel::getBandHeight() {

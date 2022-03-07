@@ -14,8 +14,10 @@
 //==============================================================================
 BandFeedbackPanel::BandFeedbackPanel()
 {
-    simpleMeter.configuration = SimpleMeter::HORIZONTAL;
-    addAndMakeVisible(simpleMeter);
+    inMeter.configuration = SimpleMeter::HORIZONTAL;
+    outMeter.configuration = SimpleMeter::HORIZONTAL;
+    addAndMakeVisible(inMeter);
+    addAndMakeVisible(outMeter);
 
 }
 
@@ -39,8 +41,6 @@ void BandFeedbackPanel::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    g.drawText ("BandFeedbackPanel", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
 }
 
 void BandFeedbackPanel::resized()
@@ -49,14 +49,23 @@ void BandFeedbackPanel::resized()
     // components that your component contains..
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    simpleMeter.setBounds(getX() + 100, 25, 100, 10);
+    inMeter.setBounds(getX() + 25, 25, 350, 20);
+    outMeter.setBounds(getX() + 25, 75, 350, 20);
 
 }
 
-void BandFeedbackPanel::updateMeters(std::atomic<float> &newMeterValue) {
-    simpleMeter.update(newMeterValue);
+void BandFeedbackPanel::updateMeter(SimpleMeter &meter, std::atomic<float> &newValue) {
+    meter.update(newValue);
 }
 
 void BandFeedbackPanel::setBandHeight(int newBandHeight) {
     bandHeight = newBandHeight;
+}
+
+SimpleMeter& BandFeedbackPanel::getInMeter() {
+    return inMeter;
+}
+
+SimpleMeter& BandFeedbackPanel::getOutMeter() {
+    return outMeter;
 }

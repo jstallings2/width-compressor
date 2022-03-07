@@ -75,8 +75,10 @@ public:
     // TODO: Do we need to write a constructor for BandParams then? Make sure this gets initialized
     BandParams bands[4];
     
-    std::atomic<float> meterValue; // good for things that "interrupt" the audio thread
-
+    // Different value for each meter
+    std::atomic<float> meterValuesIn[4];
+    std::atomic<float> meterValuesOut[4];
+    
 private:
     
     VUAnalysis vuAnalysis;

@@ -77,7 +77,8 @@ int WidthCompressorAudioProcessorEditor::getBandHeight() {
 
 void WidthCompressorAudioProcessorEditor::timerCallback() {
     // need to call update for every meter, a lot of copy-paste right now but when we have each band keep its own meters we'll just tell the bands to update their two meters each
-    vizFeedbackPanel.updateAllMeters(audioProcessor.meterValue);
+    vizFeedbackPanel.updateAllMeters(audioProcessor.meterValuesIn, "in");
+    vizFeedbackPanel.updateAllMeters(audioProcessor.meterValuesOut, "out");
     //simpleMeter.update(audioProcessor.meterValue);
 }
 

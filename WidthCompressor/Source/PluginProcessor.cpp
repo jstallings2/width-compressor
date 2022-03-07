@@ -161,15 +161,24 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         }
     }
     
+    // For testing purposes, this is treating Band 1's ratio knob as a gain knob and the two meters for each band as regular in/out gain meters. Just to make sure things are hooked up.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         for (int n = 0; n < buffer.getNumSamples(); ++n) {
             float x = buffer.getReadPointer(channel)[n];
-            meterValue = vuAnalysis.processSample(x, channel);
-            
-            // just seeing if we can control gain with band 1 ratio knob
+            float oldMeterValue = vuAnalysis.processSample(x, channel);
+            for (auto it = std::begin(meterValuesIn); it != std::end(meterValuesIn); ++it) {
+                *it = oldMeterValue;
+            }
             auto y = x * (bands[0].ratio);
             buffer.getWritePointer(channel)[n] = y;
+            float newMeterValue = vuAnalysis.processSample(y, channel);
+            for (auto it = std::begin(meterValuesOut); it != std::end(meterValuesOut); ++it) {
+                *it = newMeterValue;
+            }
+            
+            
+            
             
         }
     }

@@ -30,7 +30,7 @@ public:
     void setNumBands(int newNumBands);
     
     // Meter setting stuffs
-    void updateAllMeters(std::atomic<float> &newMeterValue);
+    void updateAllMeters(std::atomic<float>* newMeterValues, String inOrOut);
     
     const int WINDOW_HEIGHT = 600;
     const int WINDOW_WIDTH = 1000;
