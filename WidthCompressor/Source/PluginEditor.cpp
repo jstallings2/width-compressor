@@ -16,6 +16,17 @@ WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthC
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     
+    // Hook the different bands up to the processor so they can each listen for events / update the processor when needed
+    // TODO: If every component ends up requiring this, should just subclass Component and then make all components that type "AwareComponent" or something
+    band1ControlPanel.setBandId(1);
+    band2ControlPanel.setBandId(2);
+    band3ControlPanel.setBandId(3);
+    band4ControlPanel.setBandId(4);
+    
+    band1ControlPanel.linkToProcessor(p);
+    band2ControlPanel.linkToProcessor(p);
+    band3ControlPanel.linkToProcessor(p);
+    band4ControlPanel.linkToProcessor(p);
     
     setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     
@@ -69,4 +80,5 @@ void WidthCompressorAudioProcessorEditor::timerCallback() {
     vizFeedbackPanel.updateAllMeters(audioProcessor.meterValue);
     //simpleMeter.update(audioProcessor.meterValue);
 }
+
 

@@ -19,9 +19,10 @@ CompControls::CompControls()
     
     // threshold
     thresholdKnob.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    thresholdKnob.setRange(0.f, 1.f);
+    thresholdKnob.setRange(-1.f, 1.f);
     thresholdKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     thresholdKnob.setTitle("Threshold");
+    thresholdKnob.setValue(0.f);
     addAndMakeVisible(thresholdKnob);
     
     // ratio
@@ -30,6 +31,7 @@ CompControls::CompControls()
     ratioKnob.setSkewFactorFromMidPoint(5.5f);
     ratioKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     ratioKnob.setTitle("Ratio");
+    ratioKnob.setValue(2.f);
     addAndMakeVisible(ratioKnob);
     
     // attack
@@ -37,6 +39,7 @@ CompControls::CompControls()
     attackKnob.setRange(5, 1000); // ms
     attackKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     attackKnob.setTitle("Attack");
+    attackKnob.setValue(50);
     addAndMakeVisible(attackKnob);
     
     // release
@@ -44,6 +47,7 @@ CompControls::CompControls()
     releaseKnob.setRange(5, 1000); // ms
     releaseKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     releaseKnob.setTitle("Release");
+    releaseKnob.setValue(50);
     addAndMakeVisible(releaseKnob);
 
 }
@@ -89,6 +93,21 @@ void CompControls::resized()
 
 }
 
-void CompControls::sliderValueChanged(Slider *slider) {
-    return;
+String CompControls::identifyThisSlider(Slider *slider) {
+    if(slider == &thresholdKnob)
+        return "threshold";
+    if (slider == &ratioKnob)
+        return "ratio";
+    if (slider == &attackKnob)
+        return "attack";
+    if (slider == &releaseKnob)
+        return "release";
+}
+
+void CompControls::setMyParent(Slider::Listener* parent) {
+    myParent = parent;
+    thresholdKnob.addListener(myParent);
+    ratioKnob.addListener(myParent);
+    attackKnob.addListener(myParent);
+    releaseKnob.addListener(myParent);
 }

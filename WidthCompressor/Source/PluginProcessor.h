@@ -55,6 +55,26 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    // public variables for gui components
+    // How about a std::map for each band? Seems like a good way to organize
+    // Maybe even an array of std::maps?
+    // threshold, ratio, attack, gain, mute, solo
+    // set slider defaults to these values.
+    struct BandParams {
+        String name;
+        float threshold = 0.0f;
+        float ratio = 2.0f;
+        int attack = 50;
+        int release = 50;
+        bool muteOn = false;
+        bool soloOn = false;
+    };
+    
+    // Keep an array of parameter sets that we can index
+    // Will be bandId - 1 because of zero-based indexing
+    // TODO: Do we need to write a constructor for BandParams then? Make sure this gets initialized
+    BandParams bands[4];
+    
     std::atomic<float> meterValue; // good for things that "interrupt" the audio thread
 
 private:

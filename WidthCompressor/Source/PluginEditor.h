@@ -38,7 +38,6 @@ public:
     const int WINDOW_HEIGHT = 600;
     const int WINDOW_WIDTH = 1000;
     
-
 private:
     
     
@@ -58,6 +57,7 @@ private:
     VizFeedbackPanel vizFeedbackPanel;
         
     void timerCallback() override;
+    
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WidthCompressorAudioProcessorEditor)
 };

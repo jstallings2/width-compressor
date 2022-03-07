@@ -15,7 +15,8 @@
 BandControlPanel::BandControlPanel()
 {
     // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.    
+    // initialise any special settings that your component needs.
+    compControls.setMyParent(this);
     addAndMakeVisible(compControls);
     
     // mute button
@@ -61,6 +62,36 @@ void BandControlPanel::resized()
     soloButton.setBounds(compControls.getRight() + 10, muteButton.getBottom() - 5, 100, 40);
 
 }
+
 void BandControlPanel::buttonClicked(Button *button) {
     return;
 }
+
+// Set up a pointer to the processor so we can read/write dsp parameters to/from it
+// Our parent component should call this when initializing us.
+void BandControlPanel::linkToProcessor(WidthCompressorAudioProcessor &p) {
+    audioProcessor = &p;
+}
+
+void BandControlPanel::setBandId(const int newId) {
+    bandId = newId;
+}
+
+void BandControlPanel::sliderValueChanged(Slider* slider) {
+    // Need to pick our band out of the array of bands in processor
+    WidthCompressorAudioProcessor::BandParams* params = &(audioProcessor->bands[bandId - 1]);
+    
+    // Figure out which knob it was
+    // TODO: CompControls is doing nothing but make this inconvenient, consider refactoring so a BandControlPanel is the direct parent of its knobs and buttons and get rid of compControls
+    String knob = compControls.identifyThisSlider(slider);
+    
+    if (knob == "threshold")
+        params->threshold = slider->getValue();
+    if(knob == "ratio")
+        params->ratio = slider->getValue();
+    if (knob == "attack")
+        params->attack = slider->getValue();
+    if (knob == "release")
+        params->release = slider->getValue();
+}
+

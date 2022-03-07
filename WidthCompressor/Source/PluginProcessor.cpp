@@ -152,11 +152,25 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+    if (bands[0].muteOn) {
+        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        {
+            for (int n = 0; n < buffer.getNumSamples(); n++) {
+                buffer.getWritePointer(channel)[n] = 0.f;
+            }
+        }
+    }
+    
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         for (int n = 0; n < buffer.getNumSamples(); ++n) {
             float x = buffer.getReadPointer(channel)[n];
             meterValue = vuAnalysis.processSample(x, channel);
+            
+            // just seeing if we can control gain with band 1 ratio knob
+            auto y = x * (bands[0].ratio);
+            buffer.getWritePointer(channel)[n] = y;
+            
         }
     }
     
