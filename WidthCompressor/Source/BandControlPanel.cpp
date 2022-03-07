@@ -20,9 +20,11 @@ BandControlPanel::BandControlPanel()
     addAndMakeVisible(compControls);
     
     // mute button
+    muteButton.addListener(this);
     muteButton.setButtonText("Mute");
     addAndMakeVisible(muteButton);
     
+    soloButton.addListener(this);
     soloButton.setButtonText("Solo");
     addAndMakeVisible(soloButton);
 
@@ -63,10 +65,6 @@ void BandControlPanel::resized()
 
 }
 
-void BandControlPanel::buttonClicked(Button *button) {
-    return;
-}
-
 // Set up a pointer to the processor so we can read/write dsp parameters to/from it
 // Our parent component should call this when initializing us.
 void BandControlPanel::linkToProcessor(WidthCompressorAudioProcessor &p) {
@@ -93,5 +91,14 @@ void BandControlPanel::sliderValueChanged(Slider* slider) {
         params->attack = slider->getValue();
     if (knob == "release")
         params->release = slider->getValue();
+}
+
+void BandControlPanel::buttonClicked(Button *button) {
+    // Need to pick our band out of the array of bands in processor
+    WidthCompressorAudioProcessor::BandParams* params = &(audioProcessor->bands[bandId - 1]);
+    if (button == &muteButton)
+        params->muteOn = !params->muteOn;
+    if (button == &soloButton)
+        params->soloOn = !params->soloOn;
 }
 
