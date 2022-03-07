@@ -101,3 +101,16 @@ int VizFeedbackPanel::getBandHeight() {
 void VizFeedbackPanel::setNumBands(int newNumBands) {
     numBands = newNumBands;
 }
+
+void VizFeedbackPanel::setLookAndFeelReferences(LookAndFeel_V4* b1LaF, LookAndFeel_V4* b2LaF, LookAndFeel_V4* b3LaF, LookAndFeel_V4* b4LaF) {
+    // set internal fields
+    band1LookAndFeel = b1LaF;
+    band2LookAndFeel = b2LaF;
+    band3LookAndFeel = b3LaF;
+    band4LookAndFeel = b4LaF;
+    // hook up the bands to corresponding look and feel references
+    band1FeedbackPanel.setLookAndFeel(band1LookAndFeel);
+    band2FeedbackPanel.setLookAndFeel(band2LookAndFeel);
+    band3FeedbackPanel.setLookAndFeel(band3LookAndFeel);
+    band4FeedbackPanel.setLookAndFeel(band4LookAndFeel);
+}

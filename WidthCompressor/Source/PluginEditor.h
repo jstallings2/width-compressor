@@ -51,6 +51,16 @@ private:
     BandControlPanel band3ControlPanel;
     BandControlPanel band4ControlPanel;
     
+    
+    LookAndFeel_V4 band1LookAndFeel;
+    LookAndFeel_V4 band2LookAndFeel;
+    LookAndFeel_V4 band3LookAndFeel;
+    LookAndFeel_V4 band4LookAndFeel;
+    
+    // For passing these references down through child components if needed.
+    LookAndFeel_V4* bandLookandFeelReferences[4] = {&band1LookAndFeel, &band2LookAndFeel, &band3LookAndFeel, &band4LookAndFeel};
+    
+    
     int numBands = 4; // number of bands used, default 4.
     
     // Visual Feedback stuff

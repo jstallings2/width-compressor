@@ -28,6 +28,17 @@ WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthC
     band3ControlPanel.linkToProcessor(p);
     band4ControlPanel.linkToProcessor(p);
     
+    // Customize look and feel for different bands
+    band1LookAndFeel.setColour(Slider::thumbColourId, Colours::palevioletred);
+    band2LookAndFeel.setColour(Slider::thumbColourId, Colours::lightgoldenrodyellow);
+    band3LookAndFeel.setColour(Slider::thumbColourId, Colours::lightgreen);
+    band4LookAndFeel.setColour(Slider::thumbColourId, Colours::cadetblue);
+    
+    band1ControlPanel.setLookAndFeel(&band1LookAndFeel);
+    band2ControlPanel.setLookAndFeel(&band2LookAndFeel);
+    band3ControlPanel.setLookAndFeel(&band3LookAndFeel);
+    band4ControlPanel.setLookAndFeel(&band4LookAndFeel);
+    
     setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     
     addAndMakeVisible(band1ControlPanel);
@@ -36,6 +47,7 @@ WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthC
     addAndMakeVisible(band4ControlPanel);
     
     vizFeedbackPanel.setNumBands(numBands);
+    vizFeedbackPanel.setLookAndFeelReferences(&band1LookAndFeel, &band2LookAndFeel, &band3LookAndFeel, &band4LookAndFeel);
     vizFeedbackPanel.setBounds(600, 0, getWidth() - 600, getHeight());
     addAndMakeVisible(vizFeedbackPanel);
     
@@ -55,6 +67,7 @@ void WidthCompressorAudioProcessorEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     g.drawFittedText((String)(getHeight() / numBands), 400, 400, 50, 50, juce::Justification::horizontallyCentred, 1);
+
 
 }
 

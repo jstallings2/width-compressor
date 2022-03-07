@@ -34,6 +34,11 @@ public:
     
     const int WINDOW_HEIGHT = 600;
     const int WINDOW_WIDTH = 1000;
+    
+    void setLookAndFeelReferences(LookAndFeel_V4* b1LaF,
+                                  LookAndFeel_V4* b2LaF,
+                                  LookAndFeel_V4* b3LaF,
+                                  LookAndFeel_V4* b4LaF);
 
 private:
     
@@ -46,6 +51,11 @@ private:
     BandFeedbackPanel band2FeedbackPanel;
     BandFeedbackPanel band3FeedbackPanel;
     BandFeedbackPanel band4FeedbackPanel;
+    
+    LookAndFeel_V4* band1LookAndFeel;
+    LookAndFeel_V4* band2LookAndFeel;
+    LookAndFeel_V4* band3LookAndFeel;
+    LookAndFeel_V4* band4LookAndFeel;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VizFeedbackPanel)

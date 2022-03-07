@@ -15,6 +15,8 @@
 BandFeedbackPanel::BandFeedbackPanel()
 {
     inMeter.configuration = SimpleMeter::HORIZONTAL;
+    
+    
     outMeter.configuration = SimpleMeter::HORIZONTAL;
     addAndMakeVisible(inMeter);
     addAndMakeVisible(outMeter);
@@ -40,7 +42,15 @@ void BandFeedbackPanel::paint (juce::Graphics& g)
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
     g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
+    g.setFont (12.0f);
+    g.drawFittedText("Width In", inMeter.getX() + inMeter.getWidth()/2 - 10, inMeter.getBottom() + 5, 50, 10, juce::Justification::verticallyCentred, 1);
+    g.drawFittedText("-1", inMeter.getX() - 10, inMeter.getBottom() + 5, 10, 10, juce::Justification::verticallyCentred, 1);
+    g.drawFittedText("1", inMeter.getRight() + 5, inMeter.getBottom() + 5, 10, 10, juce::Justification::verticallyCentred, 1);
+    
+    g.drawFittedText("Width Out", outMeter.getX() + outMeter.getWidth()/2 - 12, outMeter.getBottom() + 5, 50, 10, juce::Justification::verticallyCentred, 1);
+    g.drawFittedText("-1", outMeter.getX() - 10, outMeter.getBottom() + 5, 10, 10, juce::Justification::verticallyCentred, 1);
+    g.drawFittedText("1", outMeter.getRight() + 5, outMeter.getBottom() + 5, 10, 10, juce::Justification::verticallyCentred, 1);
+    
 }
 
 void BandFeedbackPanel::resized()
@@ -50,7 +60,7 @@ void BandFeedbackPanel::resized()
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     inMeter.setBounds(getX() + 25, 25, 350, 20);
-    outMeter.setBounds(getX() + 25, 75, 350, 20);
+    outMeter.setBounds(getX() + 25, 100, 350, 20);
 
 }
 

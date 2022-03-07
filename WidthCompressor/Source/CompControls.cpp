@@ -23,6 +23,7 @@ CompControls::CompControls()
     thresholdKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     thresholdKnob.setTitle("Threshold");
     thresholdKnob.setValue(0.f);
+    thresholdKnob.setPopupDisplayEnabled(true, false, this);
     addAndMakeVisible(thresholdKnob);
     
     // ratio
@@ -32,6 +33,7 @@ CompControls::CompControls()
     ratioKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     ratioKnob.setTitle("Ratio");
     ratioKnob.setValue(2.f);
+    ratioKnob.setPopupDisplayEnabled(true, false, this);
     addAndMakeVisible(ratioKnob);
     
     // attack
@@ -40,6 +42,7 @@ CompControls::CompControls()
     attackKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     attackKnob.setTitle("Attack");
     attackKnob.setValue(50);
+    attackKnob.setPopupDisplayEnabled(true, false, this);
     addAndMakeVisible(attackKnob);
     
     // release
@@ -48,6 +51,7 @@ CompControls::CompControls()
     releaseKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     releaseKnob.setTitle("Release");
     releaseKnob.setValue(50);
+    releaseKnob.setPopupDisplayEnabled(true, false, this);
     addAndMakeVisible(releaseKnob);
 
 }
@@ -79,6 +83,19 @@ void CompControls::paint (juce::Graphics& g)
     g.drawFittedText(ratioKnob.getTitle(), ratioKnob.getX(), ratioKnob.getY() - 20, ratioKnob.getWidth(), 30, juce::Justification::horizontallyCentred, 1);
     g.drawFittedText(attackKnob.getTitle(), attackKnob.getX(), attackKnob.getY()  -20, attackKnob.getWidth(), 30, juce::Justification::horizontallyCentred, 1);
     g.drawFittedText(releaseKnob.getTitle(), releaseKnob.getX(), releaseKnob.getY() -20, releaseKnob.getWidth(), 30, juce::Justification::horizontallyCentred, 1);
+    
+    g.setFont(11.0f);
+    // Draw labels
+    int labelYOffset = -20; // always negative
+    g.drawFittedText((String)thresholdKnob.getMinimum(), thresholdKnob.getX(), thresholdKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)thresholdKnob.getMaximum(), thresholdKnob.getRight() - 10, thresholdKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)ratioKnob.getMinimum(), ratioKnob.getX(), ratioKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)ratioKnob.getMaximum(), ratioKnob.getRight() - 10, thresholdKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)attackKnob.getMinimum(), attackKnob.getX(), attackKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)attackKnob.getMaximum(), attackKnob.getRight() - 10, attackKnob.getBottom() + labelYOffset, 20, 10, juce::Justification::horizontallyCentred, 1);
+    
+    g.drawFittedText((String)releaseKnob.getMinimum(), releaseKnob.getX(), releaseKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)releaseKnob.getMaximum(), releaseKnob.getRight() - 10, releaseKnob.getBottom() + labelYOffset, 20, 10, juce::Justification::horizontallyCentred, 1);
 }
 
 void CompControls::resized()
