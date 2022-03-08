@@ -47,6 +47,9 @@ void BandControlPanel::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
+    
+    g.setColour(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+    g.drawRect(getX()+1, 1, 1, getHeight() - 2);
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
@@ -58,7 +61,7 @@ void BandControlPanel::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
-    compControls.setBounds(0, 0, 525, 200);
+    compControls.setBounds(0, 0, 525, 150);
     
     muteButton.setBounds(compControls.getRight() + 10, 65, 100, 40);
     soloButton.setBounds(compControls.getRight() + 10, muteButton.getBottom() - 5, 100, 40);

@@ -73,6 +73,9 @@ void CompControls::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
+    
+    g.setColour(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+    g.drawRect(getRight()-1, 1, 1, getHeight() - 2);
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
