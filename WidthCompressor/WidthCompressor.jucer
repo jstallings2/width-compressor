@@ -28,6 +28,10 @@
             file="Source/BandFeedbackPanel.cpp"/>
       <FILE id="Vb7qPd" name="BandFeedbackPanel.h" compile="0" resource="0"
             file="Source/BandFeedbackPanel.h"/>
+      <FILE id="ZGyvBW" name="WidthCompressorDSP.cpp" compile="1" resource="0"
+            file="Source/WidthCompressorDSP.cpp"/>
+      <FILE id="QEzy91" name="WidthCompressorDSP.h" compile="0" resource="0"
+            file="Source/WidthCompressorDSP.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
