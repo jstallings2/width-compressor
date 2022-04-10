@@ -96,7 +96,20 @@ void WidthCompressorAudioProcessor::prepareToPlay (double sampleRate, int sample
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    dsp::ProcessSpec spec;
+    spec.sampleRate = sampleRate;
+    spec.numChannels = getTotalNumOutputChannels();
+    spec.maximumBlockSize = samplesPerBlock;
+    
     vuAnalysis.setSampleRate(sampleRate);
+    LP.prepare(spec);
+    HP.prepare(spec);
+    
+    for (auto& buffer : filterBuffers) {
+        buffer.setSize(spec.numChannels, spec.maximumBlockSize);
+    }
+    
+    
 }
 
 void WidthCompressorAudioProcessor::releaseResources()
@@ -152,6 +165,27 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+    
+    // MULTIBAND STUFF: UNCOMMENT WHEN COMPRESSOR IS WORKING
+    // Pick up from Matkat tutorial 2:12:30
+    /*
+    for (auto& fb : filterBuffers){
+        fb = buffer;
+    }
+    
+    // Set cutoff frequencies of filters
+    auto cutoff = lowCrossover;
+    LP.setCutoffFrequency(cutoff);
+    HP.setCutoffFrequency(cutoff);
+    
+    auto fb0Block = dsp::AudioBlock<float>(filterBuffers[0]);
+    auto fb1Block = dsp::AudioBlock<float>(filterBuffers[1]);
+    
+    auto fb0Ctx = dsp::ProcessContextReplacing<float>(fb0Block);
+    auto fb1Ctx = dsp::ProcessContextReplacing<float>(fb1Block);
+     
+     */
+    
     if (bands[0].muteOn) {
         for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {
@@ -161,29 +195,29 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         }
     }
     
-    // For testing purposes, this is treating Band 1's ratio knob as a gain knob and the two meters for each band as regular in/out gain meters. Just to make sure things are hooked up.
+    // TODO: Implement correlation meter successfully
         float cor = 0.f;
         for (int n = 0; n < buffer.getNumSamples(); ++n) {
-            float oldMeterValue = vuAnalysis.processSample(x, channel);
+            float left = buffer.getWritePointer(0)[n];
+            float right = buffer.getWritePointer(1)[n];
+            cor += (left * right);
+            float oldMeterValue = vuAnalysis.processSample(cor);
             for (auto it = std::begin(meterValuesIn); it != std::end(meterValuesIn); ++it) {
                 *it = oldMeterValue;
             }
-            float left = buffer.getWritePointer(0)[i];
-            float right = buffer.getWritePointer(1)[i];
-            cor += (left * right);
-            
-            auto y = x * (bands[0].ratio); // replace with processing
             
             
-            buffer.getWritePointer(channel)[n] = y;
-            float newMeterValue = vuAnalysis.processSample(y, channel);
+            auto y = cor * (bands[0].ratio); // replace with processing
+            
+            
+            buffer.getWritePointer(1)[n] = y;
+            float newMeterValue = vuAnalysis.processSample(y);
             for (auto it = std::begin(meterValuesOut); it != std::end(meterValuesOut); ++it) {
                 *it = newMeterValue;
             }
             
             
-            
-            
+            cor /= buffer.getNumSamples();
         }
     }
     
@@ -197,7 +231,6 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     }
     cor /= buffer.getNumSamples();
      */
-}
 
 //==============================================================================
 bool WidthCompressorAudioProcessor::hasEditor() const

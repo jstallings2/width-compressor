@@ -82,6 +82,15 @@ public:
 private:
     
     VUAnalysis vuAnalysis;
+    // dsp::LinkwitzRileyFilter<float> HP, LP;
+    
+    // UNCOMMENT ONE BUT NOT BOTH OF THESE
+    // juce::AudioParameterFloat* lowCrossover { nullptr };
+    // int lowCrossover = 500; // Hz
+    
+    // std::array<juce::AudioBuffer<float>, 2> filterBuffers;
+    
+    
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WidthCompressorAudioProcessor)

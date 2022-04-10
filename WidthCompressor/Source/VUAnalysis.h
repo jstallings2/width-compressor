@@ -30,21 +30,22 @@ public:
     // Process an individual sample
     // Example:
     // vuMeterValue = instance->processSample (buffer.getReadPointer (channel)[sample] , channel);
-    float processSample (float inputSample,int channel)
+    float processSample (float inputSample)
     {
         float outputSample = inputSample;
         inputSample = fabs(inputSample);
 
-        if (previousSample[channel] < inputSample){
+        if (previousSample < inputSample){
             g = ga; // Meter rising
         }
         else{
             g = gr; // Meter falling
         }
         
-        outputSample = (1.0f - g) * inputSample + g * previousSample[channel];
-        previousSample[channel] = outputSample;
+        outputSample = (1.0f - g) * inputSample + g * previousSample;
+        previousSample = outputSample;
         
+        /*
         // Convert to decibel scale
         outputSample = 20.0f * log10(outputSample);
         
@@ -53,6 +54,7 @@ public:
         
         // Convert from scale: -75 dB to 0 db, over to the scale: 0 to 1 for the meter
         outputSample = (outputSample/75.0f) + 1;
+         */
         
         return outputSample;
     }
@@ -65,8 +67,7 @@ public:
             ga = exp(-log(9)/((float)sampleRate * 0.05));
             gr = exp(-log(9)/((float)sampleRate * 0.85));
             
-            previousSample[0] = 0.0f;
-            previousSample[1] = 0.0f;
+            previousSample = 0.0f;
         }
     }
     
@@ -78,7 +79,7 @@ private:
     float gr;
     float g;
     
-    float previousSample[2] = {0.0f};
+    float previousSample = 0.0f;
 
     float b0, b1, b2;
     float a0, a1, a2;

@@ -4,6 +4,7 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="m7XU6s" name="WidthCompressor">
     <GROUP id="{5FEAA42E-1FCE-2B70-5EFC-5E6F8EDE248F}" name="Source">
+      <FILE id="MdDh6U" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
       <FILE id="shAKG7" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="DhN3nE" name="PluginProcessor.h" compile="0" resource="0"
