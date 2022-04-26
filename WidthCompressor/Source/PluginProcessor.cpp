@@ -102,12 +102,14 @@ void WidthCompressorAudioProcessor::prepareToPlay (double sampleRate, int sample
     spec.maximumBlockSize = samplesPerBlock;
     
     vuAnalysis.setSampleRate(sampleRate);
+    /*
     LP.prepare(spec);
     HP.prepare(spec);
     
     for (auto& buffer : filterBuffers) {
         buffer.setSize(spec.numChannels, spec.maximumBlockSize);
     }
+     */
     
     
 }
@@ -249,19 +251,26 @@ void WidthCompressorAudioProcessor::getStateInformation (juce::MemoryBlock& dest
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    juce::MemoryOutputStream mos(destData, true);
+    apvts.state.writeToStream(mos);
 }
 
 void WidthCompressorAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    auto tree = juce::ValueTree::readFromData(data, sizeInBytes);
+    if (tree.isValid() ) {
+        apvts.replaceState(tree);
+    }
 }
 
-void juce::AudioProcessorValueTreeState::ParameterLayout WidthCompressorAudioProcessor::createParameterLayout() {
+juce::AudioProcessorValueTreeState::ParameterLayout WidthCompressorAudioProcessor::createParameterLayout() {
     APVTS::ParameterLayout layout;
     
     using namespace juce;
-    layout.add(std::make_unique<AudioParameterFloat>("Threshold", "Threshold", NormalizableRange<float>(-60, 12, 1, 1), 0));
+    
+    layout.add(std::make_unique<AudioParameterFloat>("Threshold", "Threshold", NormalisableRange<float>(-60, 12, 1, 1), 0));
     
     auto attackReleaseRange = NormalisableRange<float>(5, 500, 1, 1);
     
