@@ -23,6 +23,21 @@ WidthCompressorAudioProcessor::WidthCompressorAudioProcessor()
                        )
 #endif
 {
+    // MKT 1:32 for explanation
+    attack = dynamic_cast<juce::AudioParameterFloat*>(apvts.getParameter("Attack"));
+    jassert(attack != nullptr);
+    
+    release = dynamic_cast<juce::AudioParameterFloat*>(apvts.getParameter("Release"));
+    jassert(release != nullptr);
+    
+    threshold = dynamic_cast<juce::AudioParameterFloat*>(apvts.getParameter("Threshold"));
+    jassert(threshold != nullptr);
+    
+    ratio = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("Ratio"));
+    jassert(ratio != nullptr);
+    
+    bypassed = dynamic_cast<juce::AudioParameterBool*>(apvts.getParameter("Bypassed"));
+    jassert(bypassed != nullptr);
 }
 
 WidthCompressorAudioProcessor::~WidthCompressorAudioProcessor()
@@ -160,6 +175,18 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    
+    compressor.setAttack(attack -> get());
+    compressor.setRelease(release -> get());
+    compressor.setThreshold(threshold -> get());
+    compressor.setRatio(ratio -> getCurrentChoiceName().getFloatValue());
+    
+    context.isBypassed = bypassed->get();
+    
+    auto block = dsp::AudioBlock<float>(buffer);
+    auto context = dsp::ProcessContextReplacing<float>(block);
+    
+    compressor.process(context);
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -198,6 +225,7 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     }
     
     // TODO: Implement correlation meter successfully
+    // Might want to store the previously calculated correlation values from last block so that we can use that as the meterIn value.
         float cor = 0.f;
         for (int n = 0; n < buffer.getNumSamples(); ++n) {
             float left = buffer.getWritePointer(0)[n];
@@ -284,6 +312,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout WidthCompressorAudioProcesso
     }
     
     layout.add(std::make_unique<AudioParameterChoice>("Ratio", "Ratio", sa, 3));
+    
+    layout.add(std::make_unique<AudioParameterBool>("Bypassed", "Bypassed", false));
+    
     
     return layout;
 }

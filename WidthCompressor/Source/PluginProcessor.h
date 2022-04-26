@@ -86,6 +86,15 @@ public:
     
 private:
     
+    dsp::Compressor<float> compressor;
+    
+    // Cached versions of our parameters
+    juce::AudioParameterFloat* attack { nullptr };
+    juce::AudioParameterFloat* release { nullptr };
+    juce::AudioParameterFloat* threshold { nullptr };
+    juce::AudioParameterChoice* ratio { nullptr };
+    juce::AudioParameterBool* bypassed { nullptr };
+    
     VUAnalysis vuAnalysis;
     // dsp::LinkwitzRileyFilter<float> HP, LP;
     
