@@ -79,6 +79,9 @@ public:
     std::atomic<float> meterValuesIn[4];
     std::atomic<float> meterValuesOut[4];
     
+    using APVTS = juce::AudioProcessorValueTreeState;
+    static APVTS::ParameterLayout createParameterLayout();
+    
 private:
     
     VUAnalysis vuAnalysis;
