@@ -12,6 +12,37 @@
 #include "VUAnalysis.h"
 using namespace juce;
 
+struct CompressorBand
+{
+public:
+    // Cached versions of our parameters
+    juce::AudioParameterFloat* attack { nullptr };
+    juce::AudioParameterFloat* release { nullptr };
+    juce::AudioParameterFloat* threshold { nullptr };
+    juce::AudioParameterChoice* ratio { nullptr };
+    juce::AudioParameterBool* bypassed { nullptr };
+    
+    void prepare(const juce::dsp::ProcessSpec& spec) {
+        compressor.prepare(spec);
+    }
+    void updateCompressorSettings() {
+        compressor.setAttack(attack -> get());
+        compressor.setRelease(release -> get());
+        compressor.setThreshold(threshold -> get());
+        compressor.setRatio(ratio -> getCurrentChoiceName().getFloatValue());
+    }
+    void process(juce::AudioBuffer<float>& buffer) {
+        auto block = dsp::AudioBlock<float>(buffer);
+        auto context = dsp::ProcessContextReplacing<float>(block);
+        
+        context.isBypassed = bypassed->get();
+        
+        compressor.process(context);
+    }
+private:
+    juce::dsp::Compressor<float> compressor;
+};
+
 //==============================================================================
 /**
 */
@@ -85,15 +116,17 @@ public:
     APVTS apvts {*this, nullptr, "Parameters", createParameterLayout()};
     
 private:
+    // Part 6 added Compressor band so commenting this out.
+//    dsp::Compressor<float> compressor;
+//
+//    // Cached versions of our parameters
+//    juce::AudioParameterFloat* attack { nullptr };
+//    juce::AudioParameterFloat* release { nullptr };
+//    juce::AudioParameterFloat* threshold { nullptr };
+//    juce::AudioParameterChoice* ratio { nullptr };
+//    juce::AudioParameterBool* bypassed { nullptr };
+    CompressorBand compressor;
     
-    dsp::Compressor<float> compressor;
-    
-    // Cached versions of our parameters
-    juce::AudioParameterFloat* attack { nullptr };
-    juce::AudioParameterFloat* release { nullptr };
-    juce::AudioParameterFloat* threshold { nullptr };
-    juce::AudioParameterChoice* ratio { nullptr };
-    juce::AudioParameterBool* bypassed { nullptr };
     
     VUAnalysis vuAnalysis;
     // dsp::LinkwitzRileyFilter<float> HP, LP;

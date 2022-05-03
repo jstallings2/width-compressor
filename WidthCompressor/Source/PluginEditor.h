@@ -23,6 +23,9 @@ class WidthCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor,
 public Timer
 {
 public:
+    typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+    typedef juce::AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
+    
     WidthCompressorAudioProcessorEditor (WidthCompressorAudioProcessor&);
     ~WidthCompressorAudioProcessorEditor() override;
 
@@ -44,8 +47,12 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     WidthCompressorAudioProcessor& audioProcessor;
-    BandControlPanel band1ControlPanel; // lowest frequency, always visible
     
+    // Reference to the APVTS
+    juce::AudioProcessorValueTreeState& apvts;
+    
+    
+    BandControlPanel band1ControlPanel; // lowest frequency, always visible
     // Increasing frequency, only visible if numBands is set to 2, 3, or 4.
     BandControlPanel band2ControlPanel;
     BandControlPanel band3ControlPanel;
