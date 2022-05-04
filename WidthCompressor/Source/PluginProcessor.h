@@ -42,6 +42,9 @@ enum Names {
     Bypassed_Lowmid_Band,
     Bypassed_Mid_Band,
     Bypassed_High_Band,
+    
+    // Global
+    global_Gain_In,
 };
 
 inline const std::map<Names, juce::String>& GetParams()
@@ -69,7 +72,8 @@ inline const std::map<Names, juce::String>& GetParams()
         {Bypassed_Low_Band, "Bypassed Low Band"},
         {Bypassed_Lowmid_Band, "Bypassed Lowmid Band"},
         {Bypassed_Mid_Band, "Bypassed Mid Band"},
-        {Bypassed_High_Band, "Bypassed High Band"}
+        {Bypassed_High_Band, "Bypassed High Band"},
+        {global_Gain_In, "Gain In"}
         
     };
     

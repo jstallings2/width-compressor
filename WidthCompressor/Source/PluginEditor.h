@@ -18,6 +18,13 @@
 //==============================================================================
 /**
 */
+struct GlobalControls : juce::Component {
+    GlobalControls();
+    void paint(juce::Graphics& g) override;
+    void resized() override;
+private:
+    juce::Slider gainInSlider;
+};
 
 class WidthCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor,
 public Timer
@@ -71,6 +78,8 @@ private:
     VizFeedbackPanel vizFeedbackPanel;
         
     void timerCallback() override;
+    
+    GlobalControls globalControls;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WidthCompressorAudioProcessorEditor)

@@ -10,6 +10,33 @@
 #include "PluginEditor.h"
 
 //==============================================================================
+GlobalControls::GlobalControls() {
+    addAndMakeVisible(gainInSlider);
+}
+
+void GlobalControls::paint(juce::Graphics &g) {
+    using namespace juce;
+    auto bounds = getLocalBounds();
+    g.setColour(Colours::blueviolet);
+    g.fillAll();
+}
+
+void GlobalControls::resized() {
+    using namespace juce;
+    auto bounds = getLocalBounds();
+    
+    // Now if we want to add more controls, flexBox is already set up.
+    FlexBox flexBox;
+    flexBox.flexDirection = FlexBox::Direction::row;
+    flexBox.flexWrap = FlexBox::Wrap::noWrap;
+    
+    // Add more controls here
+    flexBox.items.add(FlexItem(gainInSlider).withFlex(1.f));
+    
+    flexBox.performLayout(bounds);
+}
+
+//==============================================================================
 WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthCompressorAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
@@ -44,7 +71,8 @@ WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthC
     addAndMakeVisible(band1ControlPanel);
     addAndMakeVisible(band2ControlPanel);
     addAndMakeVisible(band3ControlPanel);
-    addAndMakeVisible(band4ControlPanel);
+    //addAndMakeVisible(band4ControlPanel);
+    addAndMakeVisible(globalControls);
     
     vizFeedbackPanel.setNumBands(numBands);
     vizFeedbackPanel.setLookAndFeelReferences(&band1LookAndFeel, &band2LookAndFeel, &band3LookAndFeel, &band4LookAndFeel);
@@ -78,7 +106,9 @@ void WidthCompressorAudioProcessorEditor::resized()
     band1ControlPanel.setBounds(0, 0, 600, getBandHeight());
     band2ControlPanel.setBounds(0, band1ControlPanel.getBottom(), 600, getBandHeight());
     band3ControlPanel.setBounds(0, band2ControlPanel.getBottom(), 600, getBandHeight());
-    band4ControlPanel.setBounds(0, band3ControlPanel.getBottom(), 600, getBandHeight());
+    //band4ControlPanel.setBounds(0, band3ControlPanel.getBottom(), 600, getBandHeight());
+    // TODO: Find a permanent place for globalControls, right now its just taking place of band 4
+    globalControls.setBounds(0, band3ControlPanel.getBottom(), 600, getBandHeight());
     vizFeedbackPanel.setBounds(600, 0, getWidth() - 600, getHeight());
     
 }
