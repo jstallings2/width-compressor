@@ -206,6 +206,20 @@ private:
     
     // std::array<juce::AudioBuffer<float>, 2> filterBuffers;
     
+    // Global DSP Parameters
+    juce::dsp::Gain<float> inputGain;
+    juce::AudioParameterFloat* inputGainParam;
+    
+    // juce::dsp::Gain<float> outputGain;
+    // juce::AudioParameterFloat* outputGainParam;
+    
+    template<typename T, typename U>
+    void applyGain(T& buffer, U& gain) {
+        auto block = juce::dsp::AudioBlock<float>(buffer);
+        auto context = juce::dsp::ProcessContextReplacing<float>(block);
+        gain.process(context);
+    }
+    
     
     
     //==============================================================================

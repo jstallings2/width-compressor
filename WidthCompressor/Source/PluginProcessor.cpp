@@ -31,24 +31,26 @@ WidthCompressorAudioProcessor::WidthCompressorAudioProcessor()
         jassert(param != nullptr);
     };
     
-    floatHelper(compressor.attack, Names::Attack_Low_Band);
-    floatHelper(compressor.release, Names::Release_Low_Band);
-    floatHelper(compressor.threshold, Names::Threshold_Low_Band);
-    
     auto choiceHelper = [&apvts = this->apvts, &params](auto& param, const auto& paramName) {
         param = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter(params.at(paramName)));
         jassert(param != nullptr);
     };
     
-    choiceHelper(compressor.ratio, Names::Ratio_Low_Band);
     
     auto boolHelper = [&apvts = this->apvts, &params](auto& param, const auto& paramName) {
         param = dynamic_cast<juce::AudioParameterBool*>(apvts.getParameter(params.at(paramName)));
         jassert(param != nullptr);
     };
     
-    boolHelper(compressor.bypassed, Names::Bypassed_Low_Band);
+    floatHelper(compressor.attack, Names::Attack_Low_Band);
+    floatHelper(compressor.release, Names::Release_Low_Band);
+    floatHelper(compressor.threshold, Names::Threshold_Low_Band);
+    floatHelper(inputGainParam, Names::global_Gain_In);
     
+    choiceHelper(compressor.ratio, Names::Ratio_Low_Band);
+    
+    boolHelper(compressor.bypassed, Names::Bypassed_Low_Band);
+        
 }
 
 WidthCompressorAudioProcessor::~WidthCompressorAudioProcessor()
@@ -139,6 +141,11 @@ void WidthCompressorAudioProcessor::prepareToPlay (double sampleRate, int sample
     }
      */
     
+    inputGain.prepare(spec);
+    
+    inputGain.setRampDurationSeconds(0.05); // 50 ms
+    
+    
     
 }
 
@@ -201,6 +208,11 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
 //    context.isBypassed = bypassed->get();
 //
 //    compressor.process(context);
+    
+    inputGain.setGainDecibels(inputGainParam->get());
+    
+    applyGain(buffer, inputGain);
+    
     
     compressor.updateCompressorSettings();
     compressor.process(buffer);
@@ -316,6 +328,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout WidthCompressorAudioProcesso
     using namespace juce;
     using namespace Params;
     const auto& params = GetParams();
+    
+    auto gainRange = juce::NormalisableRange<float>(-24.f, 24.f, 0.5f, 1.f);
+    
+    layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::global_Gain_In), params.at(Names::global_Gain_In), gainRange, 0));
     
     layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::Threshold_Low_Band), params.at(Names::Threshold_Low_Band), NormalisableRange<float>(-60, 12, 1, 1), 0));
     

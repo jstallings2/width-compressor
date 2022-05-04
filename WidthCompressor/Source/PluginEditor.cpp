@@ -10,7 +10,18 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-GlobalControls::GlobalControls() {
+GlobalControls::GlobalControls(juce::AudioProcessorValueTreeState& apvts) {
+    using namespace Params;
+    const auto& params = GetParams();
+    
+    auto makeAttachmentHelper = [&params, &apvts](auto& attachment, const auto& name, auto& slider){
+        makeAttachment(attachment, apvts, params, name, slider);
+    };
+    
+    // Add more controls here
+    makeAttachmentHelper(gainInSliderAttachment, Names::global_Gain_In, gainInSlider);
+    
+    
     addAndMakeVisible(gainInSlider);
 }
 

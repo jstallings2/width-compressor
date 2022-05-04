@@ -18,12 +18,31 @@
 //==============================================================================
 /**
 */
+template<
+    typename Attachment,
+    typename APVTS,
+    typename Params,
+    typename ParamName,
+    typename SliderType
+>
+void makeAttachment(std::unique_ptr<Attachment>& attachment,
+                    APVTS& apvts,
+                    const Params& params,
+                    const ParamName& name,
+                    SliderType& slider
+                    ) {
+    attachment = std::make_unique<Attachment>(apvts, params.at(name), slider);
+}
+
 struct GlobalControls : juce::Component {
-    GlobalControls();
+    GlobalControls(juce::AudioProcessorValueTreeState& apvts );
     void paint(juce::Graphics& g) override;
     void resized() override;
 private:
     juce::Slider gainInSlider;
+    
+    using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    std::unique_ptr<Attachment> gainInSliderAttachment;
 };
 
 class WidthCompressorAudioProcessorEditor  : public juce::AudioProcessorEditor,
@@ -79,7 +98,7 @@ private:
         
     void timerCallback() override;
     
-    GlobalControls globalControls;
+    GlobalControls globalControls { audioProcessor.apvts };
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WidthCompressorAudioProcessorEditor)
