@@ -127,6 +127,8 @@ void WidthCompressorAudioProcessor::prepareToPlay (double sampleRate, int sample
     spec.numChannels = getTotalNumOutputChannels();
     spec.maximumBlockSize = samplesPerBlock;
     
+    compressor.prepare(spec);
+    
     vuAnalysis.setSampleRate(sampleRate);
     /*
     LP.prepare(spec);
@@ -200,8 +202,19 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
 //
 //    compressor.process(context);
     
-    compressor.updateCompressorSettings();
-    compressor.process(buffer);
+//    compressor.updateCompressorSettings();
+//    compressor.process(buffer);
+    compressor.setAttack(attack -> get());
+    compressor.setRelease(release -> get());
+    compressor.setThreshold(threshold -> get());
+    compressor.setRatio(ratio -> getCurrentChoiceName().getFloatValue());
+    
+    auto block = juce::dsp::AudioBlock<float>(buffer);
+    auto context = juce::dsp::ProcessContextReplacing<float>(block);
+    
+    context.isBypassed = bypassed->get();
+    
+    compressor.process(context);
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...

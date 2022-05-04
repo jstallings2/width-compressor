@@ -48,9 +48,6 @@ private:
     // access the processor object that created it.
     WidthCompressorAudioProcessor& audioProcessor;
     
-    // Reference to the APVTS
-    juce::AudioProcessorValueTreeState& apvts;
-    
     
     BandControlPanel band1ControlPanel; // lowest frequency, always visible
     // Increasing frequency, only visible if numBands is set to 2, 3, or 4.
