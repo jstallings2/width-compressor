@@ -116,6 +116,8 @@ void WidthCompressorAudioProcessor::prepareToPlay (double sampleRate, int sample
     spec.numChannels = getTotalNumOutputChannels();
     spec.maximumBlockSize = samplesPerBlock;
     
+    compressor.prepare(spec);
+    
     vuAnalysis.setSampleRate(sampleRate);
     /*
     LP.prepare(spec);
@@ -181,10 +183,10 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     compressor.setThreshold(threshold -> get());
     compressor.setRatio(ratio -> getCurrentChoiceName().getFloatValue());
     
-    context.isBypassed = bypassed->get();
+    auto block = juce::dsp::AudioBlock<float>(buffer);
+    auto context = juce::dsp::ProcessContextReplacing<float>(block);
     
-    auto block = dsp::AudioBlock<float>(buffer);
-    auto context = dsp::ProcessContextReplacing<float>(block);
+    context.isBypassed = bypassed->get();
     
     compressor.process(context);
 
