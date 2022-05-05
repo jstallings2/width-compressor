@@ -38,7 +38,12 @@ public:
     
 
 private:
-    CompControls compControls;
+//    CompControls compControls;
+    Slider thresholdKnob;
+    Slider ratioKnob;
+    Slider attackKnob;
+    Slider releaseKnob;
+    
     ToggleButton muteButton;
     ToggleButton soloButton;
     

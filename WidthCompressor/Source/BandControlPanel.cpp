@@ -16,14 +16,49 @@ BandControlPanel::BandControlPanel()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    compControls.setMyParent(this);
-    addAndMakeVisible(compControls);
+    // threshold
+    thresholdKnob.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    thresholdKnob.setRange(-1.f, 1.f);
+    thresholdKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
+    thresholdKnob.setTitle("Threshold");
+    thresholdKnob.setValue(0.f);
+    thresholdKnob.setPopupDisplayEnabled(true, false, this);
+    addAndMakeVisible(thresholdKnob);
+    
+    // ratio
+    ratioKnob.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    ratioKnob.setRange(1.f, 30.f);
+    ratioKnob.setSkewFactorFromMidPoint(5.5f);
+    ratioKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
+    ratioKnob.setTitle("Ratio");
+    ratioKnob.setValue(2.f);
+    ratioKnob.setPopupDisplayEnabled(true, false, this);
+    addAndMakeVisible(ratioKnob);
+    
+    // attack
+    attackKnob.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    attackKnob.setRange(5, 1000); // ms
+    attackKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
+    attackKnob.setTitle("Attack");
+    attackKnob.setValue(50);
+    attackKnob.setPopupDisplayEnabled(true, false, this);
+    addAndMakeVisible(attackKnob);
+    
+    // release
+    releaseKnob.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    releaseKnob.setRange(5, 1000); // ms
+    releaseKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
+    releaseKnob.setTitle("Release");
+    releaseKnob.setValue(50);
+    releaseKnob.setPopupDisplayEnabled(true, false, this);
+    addAndMakeVisible(releaseKnob);
     
     // mute button
     muteButton.addListener(this);
     muteButton.setButtonText("Mute");
     addAndMakeVisible(muteButton);
     
+    // soloButton
     soloButton.addListener(this);
     soloButton.setButtonText("Solo");
     addAndMakeVisible(soloButton);
@@ -55,17 +90,40 @@ void BandControlPanel::paint (juce::Graphics& g)
     g.setFont (14.0f);
     g.drawText ("BandControlPanel", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
+    
+    g.drawFittedText(thresholdKnob.getTitle(), thresholdKnob.getX(), thresholdKnob.getY() - 20, thresholdKnob.getWidth(), 30, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText(ratioKnob.getTitle(), ratioKnob.getX(), ratioKnob.getY() - 20, ratioKnob.getWidth(), 30, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText(attackKnob.getTitle(), attackKnob.getX(), attackKnob.getY()  -20, attackKnob.getWidth(), 30, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText(releaseKnob.getTitle(), releaseKnob.getX(), releaseKnob.getY() -20, releaseKnob.getWidth(), 30, juce::Justification::horizontallyCentred, 1);
+    
+    g.setFont(11.0f);
+    // Draw labels
+    int labelYOffset = -20; // always negative
+    g.drawFittedText((String)thresholdKnob.getMinimum(), thresholdKnob.getX(), thresholdKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)thresholdKnob.getMaximum(), thresholdKnob.getRight() - 10, thresholdKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)ratioKnob.getMinimum(), ratioKnob.getX(), ratioKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)ratioKnob.getMaximum(), ratioKnob.getRight() - 10, thresholdKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)attackKnob.getMinimum(), attackKnob.getX(), attackKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)attackKnob.getMaximum(), attackKnob.getRight() - 10, attackKnob.getBottom() + labelYOffset, 20, 10, juce::Justification::horizontallyCentred, 1);
+    
+    g.drawFittedText((String)releaseKnob.getMinimum(), releaseKnob.getX(), releaseKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)releaseKnob.getMaximum(), releaseKnob.getRight() - 10, releaseKnob.getBottom() + labelYOffset, 20, 10, juce::Justification::horizontallyCentred, 1);
 }
 
 void BandControlPanel::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
-    compControls.setBounds(0, 0, 525, 150);
     
-    muteButton.setBounds(compControls.getRight() + 10, 65, 100, 40);
-    soloButton.setBounds(compControls.getRight() + 10, muteButton.getBottom() - 5, 100, 40);
-
+    muteButton.setBounds(525 + 10, 65, 100, 40);
+    soloButton.setBounds(525 + 10, muteButton.getBottom() - 5, 100, 40);
+    
+    
+    // Comp controls
+    thresholdKnob.setBounds(25, 25, 125, 125);
+    ratioKnob.setBounds(175, 25, 125, 125);
+    attackKnob.setBounds(325, (thresholdKnob.getHeight() / 2.f), 75, 75);
+    releaseKnob.setBounds(425, (thresholdKnob.getHeight() / 2.f), 75, 75);
 }
 
 // Set up a pointer to the processor so we can read/write dsp parameters to/from it
@@ -84,15 +142,13 @@ void BandControlPanel::sliderValueChanged(Slider* slider) {
     
     // Figure out which knob it was
     // TODO: CompControls is doing nothing but make this inconvenient, consider refactoring so a BandControlPanel is the direct parent of its knobs and buttons and get rid of compControls
-    String knob = compControls.identifyThisSlider(slider);
-    
-    if (knob == "threshold")
+    if(slider == &thresholdKnob)
         params->threshold = slider->getValue();
-    if(knob == "ratio")
+    if (slider == &ratioKnob)
         params->ratio = slider->getValue();
-    if (knob == "attack")
+    if (slider == &attackKnob)
         params->attack = slider->getValue();
-    if (knob == "release")
+    if (slider == &releaseKnob)
         params->release = slider->getValue();
 }
 
