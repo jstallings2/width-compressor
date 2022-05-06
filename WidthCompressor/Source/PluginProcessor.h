@@ -184,6 +184,8 @@ public:
     
     APVTS apvts {*this, nullptr, "Parameters", createParameterLayout()};
     
+    const float RATIO_MAX = 100.f;
+    
 private:
     // Part 6 added Compressor band so commenting this out.
 //    dsp::Compressor<float> compressor;

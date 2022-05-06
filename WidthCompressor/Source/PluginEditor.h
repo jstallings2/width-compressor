@@ -18,21 +18,6 @@
 //==============================================================================
 /**
 */
-template<
-    typename Attachment,
-    typename APVTS,
-    typename Params,
-    typename ParamName,
-    typename SliderType
->
-void makeAttachment(std::unique_ptr<Attachment>& attachment,
-                    APVTS& apvts,
-                    const Params& params,
-                    const ParamName& name,
-                    SliderType& slider
-                    ) {
-    attachment = std::make_unique<Attachment>(apvts, params.at(name), slider);
-}
 
 struct GlobalControls : juce::Component {
     GlobalControls(juce::AudioProcessorValueTreeState& apvts );
@@ -75,11 +60,11 @@ private:
     WidthCompressorAudioProcessor& audioProcessor;
     
     
-    BandControlPanel band1ControlPanel; // lowest frequency, always visible
+    BandControlPanel band1ControlPanel { audioProcessor.apvts }; // lowest frequency, always visible
     // Increasing frequency, only visible if numBands is set to 2, 3, or 4.
-    BandControlPanel band2ControlPanel;
-    BandControlPanel band3ControlPanel;
-    BandControlPanel band4ControlPanel;
+//    BandControlPanel band2ControlPanel;
+//    BandControlPanel band3ControlPanel;
+//    BandControlPanel band4ControlPanel;
     
     
     LookAndFeel_V4 band1LookAndFeel;

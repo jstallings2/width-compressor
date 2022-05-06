@@ -333,9 +333,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout WidthCompressorAudioProcesso
     
     layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::global_Gain_In), params.at(Names::global_Gain_In), gainRange, 0));
     
-    layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::Threshold_Low_Band), params.at(Names::Threshold_Low_Band), NormalisableRange<float>(-60, 12, 1, 1), 0));
+    layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::Threshold_Low_Band), params.at(Names::Threshold_Low_Band), NormalisableRange<float>(-60.f, -12.f, 1.f, 1.f), 0));
     
-    auto attackReleaseRange = NormalisableRange<float>(5, 500, 1, 1);
+    //layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::Threshold_Low_Band), params.at(Names::Threshold_Low_Band), NormalisableRange<float>(-1.f, 1.f), 0));
+    
+    auto attackReleaseRange = NormalisableRange<float>(5, 1000, 1, 1);
     
     layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::Attack_Low_Band), params.at(Names::Attack_Low_Band), attackReleaseRange, 50));
     

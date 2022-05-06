@@ -12,13 +12,24 @@
 #include "BandControlPanel.h"
 
 //==============================================================================
-BandControlPanel::BandControlPanel()
+BandControlPanel::BandControlPanel(juce::AudioProcessorValueTreeState& apvts)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+    using namespace Params;
+    const auto& params = GetParams();
+    
+    auto makeAttachmentHelper = [&params, &apvts](auto& attachment, const auto& name, auto& slider){
+        makeAttachment(attachment, apvts, params, name, slider);
+    };
+    
+    // Add more controls here
+    makeAttachmentHelper(thresholdKnobAttachment, Names::Threshold_Low_Band, thresholdKnob);
+    makeAttachmentHelper(ratioKnobAttachment, Names::Ratio_Low_Band, ratioKnob);
+    makeAttachmentHelper(attackKnobAttachment, Names::Attack_Low_Band, attackKnob);
+    makeAttachmentHelper(releaseKnobAttachment, Names::Release_Low_Band, releaseKnob);
+    
+    
     // threshold
     thresholdKnob.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    thresholdKnob.setRange(-1.f, 1.f);
     thresholdKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     thresholdKnob.setTitle("Threshold");
     thresholdKnob.setValue(0.f);
@@ -27,8 +38,7 @@ BandControlPanel::BandControlPanel()
     
     // ratio
     ratioKnob.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    ratioKnob.setRange(1.f, 30.f);
-    ratioKnob.setSkewFactorFromMidPoint(5.5f);
+    ratioKnob.setSkewFactorFromMidPoint(5.f);
     ratioKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     ratioKnob.setTitle("Ratio");
     ratioKnob.setValue(2.f);
@@ -37,29 +47,29 @@ BandControlPanel::BandControlPanel()
     
     // attack
     attackKnob.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    attackKnob.setRange(5, 1000); // ms
     attackKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     attackKnob.setTitle("Attack");
+    attackKnob.setSkewFactorFromMidPoint(250.f);
     attackKnob.setValue(50);
     attackKnob.setPopupDisplayEnabled(true, false, this);
     addAndMakeVisible(attackKnob);
     
     // release
     releaseKnob.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    releaseKnob.setRange(5, 1000); // ms
     releaseKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     releaseKnob.setTitle("Release");
+    releaseKnob.setSkewFactorFromMidPoint(250.f);
     releaseKnob.setValue(50);
     releaseKnob.setPopupDisplayEnabled(true, false, this);
     addAndMakeVisible(releaseKnob);
     
     // mute button
-    muteButton.addListener(this);
+    //muteButton.addListener(this);
     muteButton.setButtonText("Mute");
     addAndMakeVisible(muteButton);
     
     // soloButton
-    soloButton.addListener(this);
+    //soloButton.addListener(this);
     soloButton.setButtonText("Solo");
     addAndMakeVisible(soloButton);
 
@@ -102,7 +112,7 @@ void BandControlPanel::paint (juce::Graphics& g)
     g.drawFittedText((String)thresholdKnob.getMinimum(), thresholdKnob.getX(), thresholdKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
     g.drawFittedText((String)thresholdKnob.getMaximum(), thresholdKnob.getRight() - 10, thresholdKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
     g.drawFittedText((String)ratioKnob.getMinimum(), ratioKnob.getX(), ratioKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
-    g.drawFittedText((String)ratioKnob.getMaximum(), ratioKnob.getRight() - 10, thresholdKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
+    g.drawFittedText((String)audioProcessor->RATIO_MAX, ratioKnob.getRight() - 10, thresholdKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
     g.drawFittedText((String)attackKnob.getMinimum(), attackKnob.getX(), attackKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
     g.drawFittedText((String)attackKnob.getMaximum(), attackKnob.getRight() - 10, attackKnob.getBottom() + labelYOffset, 20, 10, juce::Justification::horizontallyCentred, 1);
     
@@ -136,6 +146,9 @@ void BandControlPanel::setBandId(const int newId) {
     bandId = newId;
 }
 
+// Listener stuff - may not be needed with apvts in play
+/*
+ 
 void BandControlPanel::sliderValueChanged(Slider* slider) {
     // Need to pick our band out of the array of bands in processor
     WidthCompressorAudioProcessor::BandParams* params = &(audioProcessor->bands[bandId - 1]);
@@ -160,4 +173,6 @@ void BandControlPanel::buttonClicked(Button *button) {
     if (button == &soloButton)
         params->soloOn = !params->soloOn;
 }
+ 
+ */
 

@@ -57,14 +57,14 @@ WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthC
     // Hook the different bands up to the processor so they can each listen for events / update the processor when needed
     // TODO: If every component ends up requiring this, should just subclass Component and then make all components that type "AwareComponent" or something
     band1ControlPanel.setBandId(1);
-    band2ControlPanel.setBandId(2);
-    band3ControlPanel.setBandId(3);
-    band4ControlPanel.setBandId(4);
+//    band2ControlPanel.setBandId(2);
+//    band3ControlPanel.setBandId(3);
+//    band4ControlPanel.setBandId(4);
     
     band1ControlPanel.linkToProcessor(p);
-    band2ControlPanel.linkToProcessor(p);
-    band3ControlPanel.linkToProcessor(p);
-    band4ControlPanel.linkToProcessor(p);
+//    band2ControlPanel.linkToProcessor(p);
+//    band3ControlPanel.linkToProcessor(p);
+//    band4ControlPanel.linkToProcessor(p);
     
     // Customize look and feel for different bands
     band1LookAndFeel.setColour(Slider::thumbColourId, Colours::palevioletred);
@@ -73,15 +73,15 @@ WidthCompressorAudioProcessorEditor::WidthCompressorAudioProcessorEditor (WidthC
     band4LookAndFeel.setColour(Slider::thumbColourId, Colours::cadetblue);
     
     band1ControlPanel.setLookAndFeel(&band1LookAndFeel);
-    band2ControlPanel.setLookAndFeel(&band2LookAndFeel);
-    band3ControlPanel.setLookAndFeel(&band3LookAndFeel);
-    band4ControlPanel.setLookAndFeel(&band4LookAndFeel);
+//    band2ControlPanel.setLookAndFeel(&band2LookAndFeel);
+//    band3ControlPanel.setLookAndFeel(&band3LookAndFeel);
+//    band4ControlPanel.setLookAndFeel(&band4LookAndFeel);
     
     setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     
     addAndMakeVisible(band1ControlPanel);
-    addAndMakeVisible(band2ControlPanel);
-    addAndMakeVisible(band3ControlPanel);
+//    addAndMakeVisible(band2ControlPanel);
+//    addAndMakeVisible(band3ControlPanel);
     //addAndMakeVisible(band4ControlPanel);
     addAndMakeVisible(globalControls);
     
@@ -115,11 +115,11 @@ void WidthCompressorAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     band1ControlPanel.setBounds(0, 0, 600, getBandHeight());
-    band2ControlPanel.setBounds(0, band1ControlPanel.getBottom(), 600, getBandHeight());
-    band3ControlPanel.setBounds(0, band2ControlPanel.getBottom(), 600, getBandHeight());
+    //band2ControlPanel.setBounds(0, band1ControlPanel.getBottom(), 600, getBandHeight());
+    //band3ControlPanel.setBounds(0, band2ControlPanel.getBottom(), 600, getBandHeight());
     //band4ControlPanel.setBounds(0, band3ControlPanel.getBottom(), 600, getBandHeight());
     // TODO: Find a permanent place for globalControls, right now its just taking place of band 4
-    globalControls.setBounds(0, band3ControlPanel.getBottom(), 600, getBandHeight());
+    globalControls.setBounds(0, 400, 600, getBandHeight());
     vizFeedbackPanel.setBounds(600, 0, getWidth() - 600, getHeight());
     
 }
