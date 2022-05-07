@@ -256,28 +256,37 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     // TODO: Implement correlation meter successfully
     // Might want to store the previously calculated correlation values from last block so that we can use that as the meterIn value.
         float cor = 0.f;
+    float sumsqleft = 0.f;
+    float sumsqright = 0.f;
         for (int n = 0; n < buffer.getNumSamples(); ++n) {
             float left = buffer.getWritePointer(0)[n];
             float right = buffer.getWritePointer(1)[n];
             cor += (left * right);
-            float oldMeterValue = vuAnalysis.processSample(cor);
-            for (auto it = std::begin(meterValuesIn); it != std::end(meterValuesIn); ++it) {
-                *it = oldMeterValue;
-            }
             
+             sumsqleft += left * left;
+             sumsqright += right * right;
             
-            auto y = cor * (bands[0].ratio); // replace with processing
-            
-            
-            buffer.getWritePointer(1)[n] = y;
-            float newMeterValue = vuAnalysis.processSample(y);
-            for (auto it = std::begin(meterValuesOut); it != std::end(meterValuesOut); ++it) {
-                *it = newMeterValue;
-            }
-            
-            
-            cor /= buffer.getNumSamples();
         }
+            cor /= sqrt(sumsqleft) + sqrt(sumsqright);
+            // Need to normalize?
+            
+            corrDisplay = cor;
+            
+            
+            
+    float oldMeterValue = vuAnalysis.processSample(cor);
+    for (auto it = std::begin(meterValuesIn); it != std::end(meterValuesIn); ++it) {
+        *it = oldMeterValue;
+    }
+    
+//    auto y = cor * (bands[0].ratio); // replace with processing
+//
+//
+//
+//    float newMeterValue = vuAnalysis.processSample(y);
+//    for (auto it = std::begin(meterValuesOut); it != std::end(meterValuesOut); ++it) {
+//        *it = newMeterValue;
+//    }
     }
     
     // Block that Dr. Tarr wrote to get corr between L & R:

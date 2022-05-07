@@ -118,6 +118,9 @@ void BandControlPanel::paint (juce::Graphics& g)
     
     g.drawFittedText((String)releaseKnob.getMinimum(), releaseKnob.getX(), releaseKnob.getBottom() + labelYOffset, 10, 10, juce::Justification::horizontallyCentred, 1);
     g.drawFittedText((String)releaseKnob.getMaximum(), releaseKnob.getRight() - 10, releaseKnob.getBottom() + labelYOffset, 20, 10, juce::Justification::horizontallyCentred, 1);
+    
+    g.setFont(24.f);
+    g.drawFittedText((String) audioProcessor->corrDisplay, thresholdKnob.getX(), thresholdKnob.getY(), 200, 100, juce::Justification::horizontallyCentred, 1);
 }
 
 void BandControlPanel::resized()

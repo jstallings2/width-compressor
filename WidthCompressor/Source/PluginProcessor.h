@@ -186,6 +186,9 @@ public:
     
     const float RATIO_MAX = 100.f;
     
+    // temporary, for testing correlation values
+    float corrDisplay = 0.f;
+    
 private:
     // Part 6 added Compressor band so commenting this out.
 //    dsp::Compressor<float> compressor;
@@ -200,6 +203,7 @@ private:
     
     
     VUAnalysis vuAnalysis;
+    
     // dsp::LinkwitzRileyFilter<float> HP, LP;
     
     // UNCOMMENT ONE BUT NOT BOTH OF THESE
