@@ -251,13 +251,15 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     // Start of main DSP algorithm
     
     // TODO: For a lot of reasons, we are going to want to use the compressor.processSample rather than passing a block will be a lot easier and more effieicnt.
+    auto bufferSize = buffer.getNumSamples();
+    float wValues[bufferSize];
     
     // TODO: Refactor this into a separate method -->
     for (int n = 0; n < buffer.getNumSamples(); ++n) {
         // https://forum.cockos.com/showthread.php?t=126040 for the normalization term!
         // Note: If this normalization term doesn't actually work, we just need to normalize everything between -1 and 1
         
-        
+        wValues[n] = 0.f;
         
         float left = buffer.getWritePointer(0)[n];
         float right = buffer.getWritePointer(1)[n];
@@ -285,15 +287,20 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
             *it = newMeterValue;
         }
         
-        
-        
-        
+        // Give us a scaling factor (w) between new and old, that's what we're actually after
+        float w = corNew / cor; // NOTE: watch out for floating point division?
+        wValues[n] = w;
         
     // EOL
     }
         
     
     // <--
+    
+    
+    
+    // Should end up with a whole buffer of those values. Then can do mid-side processing
+    midSide.processStereoWidth(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples(), wValues);
     
 }
     

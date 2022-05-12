@@ -10,6 +10,7 @@
 
 #include "VUAnalysis.h"
 #include "WidthCompressorDSP.h"
+#include "MidSide.h"
 
 using namespace juce;
 
@@ -232,6 +233,9 @@ private:
     
     // juce::dsp::Gain<float> outputGain;
     // juce::AudioParameterFloat* outputGainParam;
+    
+    // Mid-Side processor object
+    MidSide midSide;
     
     template<typename T, typename U>
     void applyGain(T& buffer, U& gain) {
