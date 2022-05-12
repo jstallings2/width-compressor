@@ -8,8 +8,9 @@
 
 #pragma once
 
-#include <JuceHeader.h>
 #include "VUAnalysis.h"
+#include "WidthCompressorDSP.h"
+
 using namespace juce;
 
 namespace Params {
@@ -97,8 +98,9 @@ public:
     void updateCompressorSettings() {
         compressor.setAttack(attack -> get());
         compressor.setRelease(release -> get());
-        compressor.setThreshold(threshold -> get());
         compressor.setRatio(ratio -> getCurrentChoiceName().getFloatValue());
+        // Threshold is special because on UI, it's width. But to the juce compressor, it's a dB value
+        setThreshold(threshold);
     }
     void process(juce::AudioBuffer<float>& buffer) {
         auto block = dsp::AudioBlock<float>(buffer);
@@ -107,6 +109,15 @@ public:
         context.isBypassed = bypassed->get();
         
         compressor.process(context);
+    }
+    float processSample(float inputVal) {
+        compressor.processSample(0, inputVal);
+    }
+    void setThreshold(juce::AudioParameterFloat* threshold) {
+        float threshWidth = threshold -> get();
+        float threshdB = 20*log10f(threshWidth/2); // watch out for floating point arith
+        
+        compressor.setThreshold(threshdB);
     }
 private:
     juce::dsp::Compressor<float> compressor;
@@ -190,6 +201,9 @@ public:
     float corrDisplay = 0.f;
     
 private:
+    
+    //friend WidthCompressorDSP; // The DSP code needs to be able to access certain global fields in the processor.
+    size_t windowSize = 4;
     // Part 6 added Compressor band so commenting this out.
 //    dsp::Compressor<float> compressor;
 //
@@ -225,6 +239,9 @@ private:
         auto context = juce::dsp::ProcessContextReplacing<float>(block);
         gain.process(context);
     }
+    
+    juce::AudioBuffer<float> corrs; // for storing correlation values
+    // so we don't have to make a new buffer every time we process a buffer of loop
     
     
     

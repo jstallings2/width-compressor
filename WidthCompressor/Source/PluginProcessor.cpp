@@ -213,17 +213,6 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     
     applyGain(buffer, inputGain);
     
-    
-    compressor.updateCompressorSettings();
-    compressor.process(buffer);
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    
     // MULTIBAND STUFF: UNCOMMENT WHEN COMPRESSOR IS WORKING
     // Pick up from Matkat tutorial 2:12:30
     /*
@@ -254,40 +243,59 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     }
     
     // TODO: Implement correlation meter successfully
-    // Might want to store the previously calculated correlation values from last block so that we can use that as the meterIn value.
-        float cor = 0.f;
-    float sumsqleft = 0.f;
-    float sumsqright = 0.f;
-        for (int n = 0; n < buffer.getNumSamples(); ++n) {
-            float left = buffer.getWritePointer(0)[n];
-            float right = buffer.getWritePointer(1)[n];
-            cor += (left * right);
-            
-             sumsqleft += left * left;
-             sumsqright += right * right;
-            
-        }
-            cor /= sqrt(sumsqleft) + sqrt(sumsqright);
-            // Need to normalize?
-            
-            corrDisplay = cor;
-            
-            
-            
-    float oldMeterValue = vuAnalysis.processSample(cor);
-    for (auto it = std::begin(meterValuesIn); it != std::end(meterValuesIn); ++it) {
-        *it = oldMeterValue;
-    }
+    // Might want to store the previously calculated correlation values from last block so that we can use that as the meterIn value. - EDIT: VUAnalysis stores that itself
     
-//    auto y = cor * (bands[0].ratio); // replace with processing
-//
-//
-//
-//    float newMeterValue = vuAnalysis.processSample(y);
-//    for (auto it = std::begin(meterValuesOut); it != std::end(meterValuesOut); ++it) {
-//        *it = newMeterValue;
-//    }
+    // Obviously the big "IF" here is if we calculated the correlation values correctly. But in a dire situation, if we get it "close" so that everything is between -1 and 1, we should be ok.
+    
+    compressor.updateCompressorSettings();
+    // Start of main DSP algorithm
+    
+    // TODO: For a lot of reasons, we are going to want to use the compressor.processSample rather than passing a block will be a lot easier and more effieicnt.
+    
+    // TODO: Refactor this into a separate method -->
+    for (int n = 0; n < buffer.getNumSamples(); ++n) {
+        // https://forum.cockos.com/showthread.php?t=126040 for the normalization term!
+        // Note: If this normalization term doesn't actually work, we just need to normalize everything between -1 and 1
+        
+        
+        
+        float left = buffer.getWritePointer(0)[n];
+        float right = buffer.getWritePointer(1)[n];
+        float cor = (left * right) / sqrtf((left*left)/(right*right));
+
+        // For the meter, leave between -1 and 1
+        // TODO: Meter still janky.
+        corrDisplay = cor;
+        float oldMeterValue = vuAnalysis.processSample(cor);
+        for (auto it = std::begin(meterValuesIn); it != std::end(meterValuesIn); ++it) {
+            *it = oldMeterValue;
+        }
+        
+        // We feed this value to the compressor now.
+        /* Note that I've monkeypatched the juce::BallisticsFilter (used in the juce::Compressor) so that it will scale our signal between 0 and 1 without using abs. This is a crucial part of the algorithm because we need to conserve ordinality - we do not have the concept of "same amplitude but opposing phase" as we do with a regular signal. A value that was at -0.3 needs to be considered a lesser value than one that was at 0.3 for example.
+         */
+        
+        float corNew = compressor.processSample(cor);
+        
+        // Getting this value out of the compressor, we need to scale back to between -1 and 1 for the out meter.
+        corNew = cor * 2 - 1;
+        
+        float newMeterValue = vuAnalysis.processSample(corNew);
+        for (auto it = std::begin(meterValuesOut); it != std::end(meterValuesOut); ++it) {
+            *it = newMeterValue;
+        }
+        
+        
+        
+        
+        
+    // EOL
     }
+        
+    
+    // <--
+    
+}
     
     // Block that Dr. Tarr wrote to get corr between L & R:
     /*

@@ -43,9 +43,11 @@ void WidthCompressorDSP::process(float *leftChannel, float *rightChannel, const 
     }
     
     
-    
-    
-    
+}
+
+juce::AudioBuffer<float>& WidthCompressorDSP::makeBufferOfCorrValuesForCompressor(juce::AudioBuffer<float>& buffer) {
+    // TODO
+    // Turn the audio into a mono vector of correlation values and transform them to dB scale to go into compressor.
     
     
     
