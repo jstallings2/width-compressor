@@ -20,6 +20,8 @@
 #ifndef VUAnalysis_h
 #define VUAnalysis_h
 
+#include <cmath>
+
 // Class definition
 class VUAnalysis  
 {

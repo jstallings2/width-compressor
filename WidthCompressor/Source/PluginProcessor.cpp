@@ -254,17 +254,33 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     auto bufferSize = buffer.getNumSamples();
     float wValues[bufferSize];
     
+    int miniBufferSize = 4;
+    int k = 0; // counter variable, reset every time we get to miniBufferSize
+    int index = 0;
+    int stopIndex = index + miniBufferSize;
+    float corrs[bufferSize];
+    
     // TODO: Refactor this into a separate method -->
     for (int n = 0; n < buffer.getNumSamples(); ++n) {
         // https://forum.cockos.com/showthread.php?t=126040 for the normalization term!
         // Note: If this normalization term doesn't actually work, we just need to normalize everything between -1 and 1
         
-        wValues[n] = 0.f;
-        
-        float left = buffer.getWritePointer(0)[n];
-        float right = buffer.getWritePointer(1)[n];
-        float cor = (left * right) / sqrtf((left*left)/(right*right));
+        float cor = 0.f;
+        if(stopIndex > bufferSize)
+            cor = corrDisplay; // last calculated cor value
+        else
+            cor = xcorr(buffer, index, stopIndex);
+            
+        k++;
 
+        if (k == stopIndex) {
+            index += miniBufferSize;
+            stopIndex += miniBufferSize;
+            k = 0;
+        }
+    
+        corrs[n] = cor;
+        
         // For the meter, leave between -1 and 1
         // TODO: Meter still janky.
         corrDisplay = cor;
@@ -276,11 +292,13 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         // We feed this value to the compressor now.
         /* Note that I've monkeypatched the juce::BallisticsFilter (used in the juce::Compressor) so that it will scale our signal between 0 and 1 without using abs. This is a crucial part of the algorithm because we need to conserve ordinality - we do not have the concept of "same amplitude but opposing phase" as we do with a regular signal. A value that was at -0.3 needs to be considered a lesser value than one that was at 0.3 for example.
          */
+        // ^ Note I don't think juce lets you do this. But since abs will do nothing after it's between 0 and 1, we can just do it here.
+        cor = (cor + 1) * 0.5;
         
         float corNew = compressor.processSample(cor);
         
         // Getting this value out of the compressor, we need to scale back to between -1 and 1 for the out meter.
-        corNew = cor * 2 - 1;
+        // corNew = cor * 2 - 1;
         
         float newMeterValue = vuAnalysis.processSample(corNew);
         for (auto it = std::begin(meterValuesOut); it != std::end(meterValuesOut); ++it) {
@@ -357,7 +375,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout WidthCompressorAudioProcesso
     
     layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::global_Gain_In), params.at(Names::global_Gain_In), gainRange, 0));
     
-    layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::Threshold_Low_Band), params.at(Names::Threshold_Low_Band), NormalisableRange<float>(-60.f, -12.f, 1.f, 1.f), 0));
+    layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::Threshold_Low_Band), params.at(Names::Threshold_Low_Band), NormalisableRange<float>(0.f, 2.f, 0.1f, 1.f), 0));
     
     //layout.add(std::make_unique<AudioParameterFloat>(params.at(Names::Threshold_Low_Band), params.at(Names::Threshold_Low_Band), NormalisableRange<float>(-1.f, 1.f), 0));
     
@@ -379,6 +397,30 @@ juce::AudioProcessorValueTreeState::ParameterLayout WidthCompressorAudioProcesso
     
     
     return layout;
+}
+
+float WidthCompressorAudioProcessor::xcorr(AudioBuffer<float>& buffer, int index, int stopIndex) {
+    
+    auto left = buffer.getReadPointer(0);
+    auto right = buffer.getReadPointer(1);
+
+    // calc regular xcorr (might have to do more complex math to do this)
+    float c = 0.f;
+        
+    float cxx0 = 0.f;
+    float cyy0 = 0.f;
+    // sum squares left & right
+    for (int k = index; k < stopIndex; k++) {
+        int reverseIndex = stopIndex - 1 - (k - index);
+        c = left[k] * right[reverseIndex];
+        cxx0 += pow(fabs(left[k]), 2);
+        cyy0 += pow(fabs(right[k]), 2);
+    }
+    // sqrt those
+    float scale = sqrt(cxx0*cyy0);
+    c = c / scale;
+    
+    return c;
 }
 
 //==============================================================================

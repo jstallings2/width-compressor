@@ -32,7 +32,6 @@ BandControlPanel::BandControlPanel(juce::AudioProcessorValueTreeState& apvts)
     thresholdKnob.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     thresholdKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     thresholdKnob.setTitle("Threshold");
-    thresholdKnob.setValue(0.f);
     thresholdKnob.setPopupDisplayEnabled(true, false, this);
     addAndMakeVisible(thresholdKnob);
     
@@ -41,7 +40,6 @@ BandControlPanel::BandControlPanel(juce::AudioProcessorValueTreeState& apvts)
     ratioKnob.setSkewFactorFromMidPoint(5.f);
     ratioKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     ratioKnob.setTitle("Ratio");
-    ratioKnob.setValue(2.f);
     ratioKnob.setPopupDisplayEnabled(true, false, this);
     addAndMakeVisible(ratioKnob);
     
@@ -50,7 +48,6 @@ BandControlPanel::BandControlPanel(juce::AudioProcessorValueTreeState& apvts)
     attackKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     attackKnob.setTitle("Attack");
     attackKnob.setSkewFactorFromMidPoint(250.f);
-    attackKnob.setValue(50);
     attackKnob.setPopupDisplayEnabled(true, false, this);
     addAndMakeVisible(attackKnob);
     
@@ -59,7 +56,6 @@ BandControlPanel::BandControlPanel(juce::AudioProcessorValueTreeState& apvts)
     releaseKnob.setTextBoxStyle(Slider::NoTextBox, false, 100, 30);
     releaseKnob.setTitle("Release");
     releaseKnob.setSkewFactorFromMidPoint(250.f);
-    releaseKnob.setValue(50);
     releaseKnob.setPopupDisplayEnabled(true, false, this);
     addAndMakeVisible(releaseKnob);
     

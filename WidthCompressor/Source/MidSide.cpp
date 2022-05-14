@@ -44,10 +44,12 @@ void MidSide::processStereoWidth(float *leftChannel, float *rightChannel, const 
     }
 }
 
+/*
 void MidSide::processStereowidth(juce::AudioBuffer<float> &buffer) {
     float * leftChannel = buffer.getWritePointer(0);
     float * rightChannel = buffer.getWritePointer(1);
     int N = buffer.getNumSamples();
-    midSide.processStereoWidth(leftChannel, rightChannel, N);
+    processStereoWidth(leftChannel, rightChannel, N);
 }
+ */
 

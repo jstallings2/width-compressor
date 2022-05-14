@@ -112,7 +112,8 @@ public:
         compressor.process(context);
     }
     float processSample(float inputVal) {
-        compressor.processSample(0, inputVal);
+        float result = compressor.processSample(0, inputVal);
+        return result;
     }
     void setThreshold(juce::AudioParameterFloat* threshold) {
         float threshWidth = threshold -> get();
@@ -166,6 +167,8 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    float xcorr(AudioBuffer<float>& buffer, int index, int stopIndex);
     
     // public variables for gui components
     // How about a std::map for each band? Seems like a good way to organize
