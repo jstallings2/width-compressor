@@ -267,7 +267,7 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         
         float cor = 0.f;
         if(stopIndex > bufferSize)
-            cor = corrDisplay; // last calculated cor value
+            cor = corrDisplay; // last calculated cor value - also use if we don't need to calculate corr again (really only need to calculate at the start of each mini buffer - use the cached version to save time). Use cached if k != index
         else
             cor = xcorr(buffer, index, stopIndex);
             
@@ -293,7 +293,7 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         /* Note that I've monkeypatched the juce::BallisticsFilter (used in the juce::Compressor) so that it will scale our signal between 0 and 1 without using abs. This is a crucial part of the algorithm because we need to conserve ordinality - we do not have the concept of "same amplitude but opposing phase" as we do with a regular signal. A value that was at -0.3 needs to be considered a lesser value than one that was at 0.3 for example.
          */
         // ^ Note I don't think juce lets you do this. But since abs will do nothing after it's between 0 and 1, we can just do it here.
-        cor = (cor + 1) * 0.5;
+        cor = (-cor + 1) * 0.5;
         
         float corNew = compressor.processSample(cor);
         
@@ -306,7 +306,7 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         }
         
         // Give us a scaling factor (w) between new and old, that's what we're actually after
-        float w = corNew / cor; // NOTE: watch out for floating point division?
+        float w = cor != 0 ? corNew / cor : 1.f; // watches out for div by zero
         wValues[n] = w;
         
     // EOL
@@ -417,8 +417,16 @@ float WidthCompressorAudioProcessor::xcorr(AudioBuffer<float>& buffer, int index
         cyy0 += pow(fabs(right[k]), 2);
     }
     // sqrt those
-    float scale = sqrt(cxx0*cyy0);
-    c = c / scale;
+    float scale = 1.f;
+    if (cxx0 != 0.f && cyy0 != 0.f)
+        scale = sqrt(cxx0*cyy0);
+    else if (cxx0 != 0.f)
+        scale = sqrt(cxx0);
+    else if (cyy0 != 0.f)
+        scale = sqrt(cyy0);
+    // else leave it as 1
+    
+    c /= scale;
     
     return c;
 }
