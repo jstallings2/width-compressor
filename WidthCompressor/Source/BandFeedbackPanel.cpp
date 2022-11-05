@@ -14,10 +14,10 @@
 //==============================================================================
 BandFeedbackPanel::BandFeedbackPanel()
 {
-    inMeter.configuration = SimpleMeter::HORIZONTAL;
+    inMeter.configuration = SimpleMeter::CORRELATION;
     
     
-    outMeter.configuration = SimpleMeter::HORIZONTAL;
+    outMeter.configuration = SimpleMeter::CORRELATION;
     addAndMakeVisible(inMeter);
     addAndMakeVisible(outMeter);
 

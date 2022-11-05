@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="mKCHL4" name="WidthCompressor" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginChannelConfigs="{2,2}">
   <MAINGROUP id="m7XU6s" name="WidthCompressor">
     <GROUP id="{5FEAA42E-1FCE-2B70-5EFC-5E6F8EDE248F}" name="Source">
       <FILE id="MdDh6U" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
@@ -20,7 +21,7 @@
       <FILE id="Ea9BhJ" name="BandControlPanel.h" compile="0" resource="0"
             file="Source/BandControlPanel.h"/>
       <FILE id="wCtKDx" name="VUAnalysis.h" compile="0" resource="0" file="../../AET5895-SP21-master/AdditionalFiles/VUAnalysis.h"/>
-      <FILE id="Z2nGFD" name="SimpleMeter.h" compile="0" resource="0" file="../../AET5895-SP21-master/AdditionalFiles/SimpleMeter.h"/>
+      <FILE id="Jsi6MJ" name="SimpleMeter.h" compile="0" resource="0" file="Source/SimpleMeter.h"/>
       <FILE id="Hz0Osc" name="VizFeedbackPanel.cpp" compile="1" resource="0"
             file="Source/VizFeedbackPanel.cpp"/>
       <FILE id="QvsI5I" name="VizFeedbackPanel.h" compile="0" resource="0"

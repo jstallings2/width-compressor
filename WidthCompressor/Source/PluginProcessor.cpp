@@ -267,7 +267,7 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         
         float cor = 0.f;
         if(stopIndex > bufferSize)
-            cor = corrDisplay; // last calculated cor value - also use if we don't need to calculate corr again (really only need to calculate at the start of each mini buffer - use the cached version to save time). Use cached if k != index
+            cor = corrDisplayIn; // last calculated cor value - also use if we don't need to calculate corr again (really only need to calculate at the start of each mini buffer - use the cached version to save time). Use cached if k != index
         else
             cor = xcorr(buffer, index, stopIndex);
             
@@ -283,7 +283,7 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         
         // For the meter, leave between -1 and 1
         // TODO: Meter still janky.
-        corrDisplay = cor;
+        corrDisplayIn = cor;
         float oldMeterValue = vuAnalysis.processSample(cor);
         for (auto it = std::begin(meterValuesIn); it != std::end(meterValuesIn); ++it) {
             *it = oldMeterValue;
@@ -298,12 +298,15 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
         float corNew = compressor.processSample(cor);
         
         // Getting this value out of the compressor, we need to scale back to between -1 and 1 for the out meter.
-        // corNew = cor * 2 - 1;
+//        float corForDisplay = corNew * 2 - 1;
+//
+//        float newMeterValue = vuAnalysis.processSample(corForDisplay);
+//        //DBG("Meter value: " + (String)(newMeterValue) + "\n");
+//
+//        for (auto it = std::begin(meterValuesOut); it != std::end(meterValuesOut); ++it) {
+//            *it = newMeterValue;
+//        }
         
-        float newMeterValue = vuAnalysis.processSample(corNew);
-        for (auto it = std::begin(meterValuesOut); it != std::end(meterValuesOut); ++it) {
-            *it = newMeterValue;
-        }
         
         // Give us a scaling factor (w) between new and old, that's what we're actually after
         float w = cor != 0 ? corNew / cor : 1.f; // watches out for div by zero
@@ -319,6 +322,25 @@ void WidthCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     
     // Should end up with a whole buffer of those values. Then can do mid-side processing
     midSide.processStereoWidth(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples(), wValues);
+    
+    // calculate correlation again
+    float corOut = 0.f;
+    if(stopIndex > bufferSize)
+        corOut = corrDisplayOut; // last calculated cor value - also use if we don't need to calculate corr again (really only need to calculate at the start of each mini buffer - use the cached version to save time). Use cached if k != index
+    else
+        corOut = xcorr(buffer, index, stopIndex);
+    
+    float newMeterValue = vuAnalysis.processSample(corOut);
+    //DBG("Meter value: " + (String)(newMeterValue) + "\n");
+    
+    
+    
+    for (auto it = std::begin(meterValuesOut); it != std::end(meterValuesOut); ++it) {
+        *it = newMeterValue;
+    }
+    
+    DBG(meterValuesIn[0] - meterValuesOut[0]);
+
     
 }
     

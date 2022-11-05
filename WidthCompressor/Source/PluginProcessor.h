@@ -202,7 +202,8 @@ public:
     const float RATIO_MAX = 100.f;
     
     // temporary, for testing correlation values
-    float corrDisplay = 0.f;
+    float corrDisplayIn = 0.f;
+    float corrDisplayOut = 0.f;
     
 private:
     
